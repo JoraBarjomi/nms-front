@@ -1,5 +1,3 @@
-import React from "react";
-
 export function AlarmsPage() {
   return (
     <div>
