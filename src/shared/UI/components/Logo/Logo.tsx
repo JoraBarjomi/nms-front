@@ -1,4 +1,3 @@
-import React from "react";
 import { LogoIcon } from "../../icons/icons";
 import classes from "./Logo.module.css";
 
