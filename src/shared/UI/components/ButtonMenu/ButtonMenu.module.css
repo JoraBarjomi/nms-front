@@ -1,0 +1,46 @@
+.styled {
+  border: 0;
+  width: 100%;
+  line-height: 1;
+  padding: 12px 20px;
+  font-size: 18px;
+  text-align: left;
+  color: white;
+  background-color: #2c2c2c;
+  border-radius: 8px;
+  transition: all 0.2 ease;
+
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 10px;
+}
+
+.styled:hover {
+  color: white;
+  background-color: #333333;
+  transform: translateY(1px);
+}
+
+.styled:active {
+  color: #afcdff;
+}
+
+.styled svg {
+  stroke: currentColor;
+}
+
+.styled:hover svg {
+  stroke: currentColor;
+}
+
+.styled:active svg {
+  stroke: currentColor;
+}
+
+.poppins_regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #9d9d9d;
+}

@@ -1,0 +1,9 @@
+export { default as LogoIcon } from "./src/logo.svg?react";
+export { default as HomeIcon } from "./src/home.svg?react";
+export { default as DashboardIcon } from "./src/dashboard.svg?react";
+export { default as AlertIcon } from "./src/alerts.svg?react";
+export { default as DevicesIcon } from "./src/devices.svg?react";
+export { default as LogsIcon } from "./src/logs.svg?react";
+export { default as ConfigIcon } from "./src/config.svg?react";
+export { default as SettingsIcon } from "./src/settings.svg?react";
+export { default as SupportIcon } from "./src/help-circle.svg?react";
