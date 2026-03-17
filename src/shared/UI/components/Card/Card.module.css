@@ -1,0 +1,43 @@
+.card_ground {
+  display: flex;
+  background-color: #333333;
+  width: 217px;
+  height: 90px;
+  border-radius: 10px;
+  padding: 14px;
+  box-sizing: border-box;
+  gap: 120px;
+}
+
+.card_content {
+  flex-direction: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card_icon {
+  flex: 2;
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  color: #727272;
+}
+
+.card_title {
+  flex: 1;
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 15px;
+  margin: 0;
+  padding-bottom: 11px;
+  color: #727272;
+}
+
+.card_main_text {
+  flex: 1;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 20px;
+}
