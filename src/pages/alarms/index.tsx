@@ -13,7 +13,7 @@ import classes from "./alarms.module.css";
 
 export function AlarmsPage() {
   return (
-    <div>
+    <div className={classes.content}>
       <div className={classes.cards}>
         <div className={classes.left_cards}>
           <Card title={"Alarms"} text={"943"} icon={AlarmsIcon}></Card>
@@ -46,7 +46,10 @@ export function AlarmsPage() {
           ></CardStatus>
         </div>
       </div>
-      <Table></Table>
+      <div className={classes.table}>
+        {" "}
+        <Table></Table>
+      </div>
     </div>
   );
 }

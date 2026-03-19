@@ -4,8 +4,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo } from "react";
-import "./Table.module.css";
+import { useMemo, useState } from "react";
+import classes from "./Table.module.css";
+
+import { Status } from "../Status/Status";
 
 type Alarms = {
   status: string;
@@ -28,6 +30,78 @@ const defaultData: Alarms[] = [
     spec_problem: "Ping Failure",
   },
   {
+    status: "warning",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
+    status: "closed",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
+    status: "closed",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
+    status: "critical",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
+    status: "critical",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
+    status: "closed",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
+    status: "major",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
+    status: "warning",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
+    status: "closed",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
+    status: "closed",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
+    status: "closed",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
+    status: "critical",
+    device: "bs-196",
+    probable_cause: "Power supply failure",
+    spec_problem: "Ping Failure",
+  },
+  {
     status: "closed",
     device: "bs-196",
     probable_cause: "Power supply failure",
@@ -39,23 +113,50 @@ const columnHelper = createColumnHelper<Alarms>();
 
 const Table = () => {
   const data = useMemo(() => [...defaultData], []);
+  const [rowSelection, setRowSelection] = useState({});
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor("status", {
-        cell: (info) => info.getValue(),
+      columnHelper.display({
+        id: "selected",
+        size: 50,
+        header: ({ table }) => (
+          <div className={classes.checkboxDiv}>
+            <input
+              type="checkbox"
+              className={classes.checkbox}
+              checked={table.getIsAllRowsSelected()}
+              onChange={table.getToggleAllPageRowsSelectedHandler()}
+            />
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className={classes.checkboxDiv}>
+            <input
+              type="checkbox"
+              className={classes.checkbox}
+              checked={row.getIsSelected()}
+              disabled={!row.getCanSelect()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          </div>
+        ),
       }),
-      columnHelper.accessor((row) => row.device, {
-        id: "device",
-        cell: (info) => <i>{info.getValue()}</i>,
-        header: () => <span>Device</span>,
+      columnHelper.accessor("status", {
+        header: () => "Status",
+        cell: (info) => <Status status={info.getValue() as string} />,
+      }),
+      columnHelper.accessor("device", {
+        header: () => "Device",
+        cell: (info) => info.renderValue(),
       }),
       columnHelper.accessor("probable_cause", {
-        header: () => "probable_cause",
+        header: () => "Probable Cause",
         cell: (info) => info.renderValue(),
       }),
       columnHelper.accessor("spec_problem", {
-        header: () => <span>spec_problem</span>,
+        header: () => "Specific Problem",
+        cell: (info) => info.renderValue(),
       }),
     ],
     [],
@@ -64,12 +165,14 @@ const Table = () => {
   const table = useReactTable({
     data,
     columns,
+    state: { rowSelection },
+    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <div className="p-2">
+    <div className={classes.table_div}>
       <table>
-        <thead>
+        <thead className={classes.thead}>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
@@ -85,7 +188,7 @@ const Table = () => {
             </tr>
           ))}
         </thead>
-        <tbody>
+        <tbody className={classes.tbody}>
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
@@ -96,22 +199,6 @@ const Table = () => {
             </tr>
           ))}
         </tbody>
-        <tfoot>
-          {table.getFooterGroups().map((footerGroup) => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.footer,
-                        header.getContext(),
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot>
       </table>
     </div>
   );
