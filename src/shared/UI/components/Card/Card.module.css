@@ -1,22 +1,23 @@
 .card_ground {
   display: flex;
   background-color: #333333;
-  width: 217px;
+  width: 190px;
   height: 90px;
   border-radius: 10px;
-  padding: 14px;
+  padding: 10px;
+  padding-bottom: 14px;
   box-sizing: border-box;
-  gap: 120px;
+  justify-content: space-between;
 }
 
 .card_content {
-  flex-direction: flex;
+  display: flex;
+  flex: 1;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .card_icon {
-  flex: 2;
   width: 19px;
   height: 19px;
   flex-shrink: 0;
@@ -24,20 +25,52 @@
 }
 
 .card_title {
-  flex: 1;
   font-family: "Poppins", sans-serif;
   font-weight: 300;
   font-style: normal;
   font-size: 15px;
   margin: 0;
-  padding-bottom: 11px;
   color: #727272;
 }
 
 .card_main_text {
-  flex: 1;
   font-family: "Poppins", sans-serif;
   font-weight: 600;
   font-style: normal;
-  font-size: 20px;
+  font-size: 25px;
+  margin: 0;
+}
+
+.card_status {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+.card_critical,
+.card_major,
+.card_warning,
+.card_closed {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+}
+
+.card_critical {
+  background-color: #ff4c4c;
+}
+
+.card_major {
+  background-color: #ff9800;
+}
+
+.card_warning {
+  background-color: #ffcc00;
+}
+
+.card_closed {
+  background-color: #4cd964;
 }

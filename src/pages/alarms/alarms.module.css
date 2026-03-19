@@ -1,4 +1,15 @@
 .cards {
   display: flex;
+  gap: 55px;
+  align-items: flex-start;
+}
+
+.left_cards {
+  display: flex;
+  gap: 10px;
+}
+
+.right_cards {
+  display: flex;
   gap: 10px;
 }
