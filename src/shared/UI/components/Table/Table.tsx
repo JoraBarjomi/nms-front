@@ -2,10 +2,14 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
+  type SortingState,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import classes from "./Table.module.css";
+
+import { UpIcon, DownIcon } from "../../icons/icons";
 
 import { Status } from "../Status/Status";
 
@@ -114,6 +118,7 @@ const columnHelper = createColumnHelper<Alarms>();
 const Table = () => {
   const data = useMemo(() => [...defaultData], []);
   const [rowSelection, setRowSelection] = useState({});
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const columns = useMemo(
     () => [
@@ -165,9 +170,11 @@ const Table = () => {
   const table = useReactTable({
     data,
     columns,
-    state: { rowSelection },
+    state: { rowSelection, sorting },
     onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
   return (
     <div className={classes.table_div}>
@@ -177,12 +184,18 @@ const Table = () => {
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
+                  {header.isPlaceholder ? null : (
+                    <div onClick={header.column.getToggleSortingHandler()}>
+                      {flexRender(
                         header.column.columnDef.header,
                         header.getContext(),
-                      )}
+                      )}{" "}
+                      {{
+                        asc: <UpIcon />,
+                        desc: <DownIcon />,
+                      }[header.column.getIsSorted() as string] ?? null}
+                    </div>
+                  )}
                 </th>
               ))}
             </tr>
