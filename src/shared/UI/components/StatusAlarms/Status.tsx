@@ -9,7 +9,6 @@ export function Status({ status }: StatusProps) {
     <>
       {status === "critical" ? (
         <div className={classes.content}>
-          {" "}
           <div className={classes.card_critical}></div>
           <h1 className={classes.h1}>Critical</h1>
         </div>

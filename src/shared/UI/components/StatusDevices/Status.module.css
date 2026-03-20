@@ -1,0 +1,39 @@
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  gap: 5px;
+}
+
+.card_down,
+.card_maint,
+.card_deg,
+.card_up {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+}
+
+.card_down {
+  background-color: #ff4c4c;
+}
+
+.card_maint {
+  background-color: #2296f3;
+}
+
+.card_deg {
+  background-color: #ffc107;
+}
+
+.card_up {
+  background-color: #4cd964;
+}
+
+.h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.05rem;
+}

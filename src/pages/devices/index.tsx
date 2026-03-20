@@ -8,29 +8,28 @@ import { CardStatus } from "../../shared/UI/components/Card/CardStatus/CardStatu
 //   MaintIcon,
 //   PlotIcon,
 // } from "../../shared/UI/icons/icons";
-import Table from "../../shared/UI/components/Table/Table";
 import classes from "./devices.module.css";
-
+import Table from "../../widgets/Table/Table";
+import { DevicesData } from "../../entities/Device";
+import { deviceTableColumns } from "../../features/deviceTable/deviceColumns";
 export function DevicesPage() {
   return (
     <div className={classes.content}>
       <div className={classes.cards}>
-        <div className={classes.left_cards}>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
-        </div>
-        <div className={classes.right_cards}>
-          <CardStatus></CardStatus>
-          <CardStatus></CardStatus>
-          <CardStatus></CardStatus>
-          <CardStatus></CardStatus>
-        </div>
+        <Card></Card>
+        <Card></Card>
+        <Card></Card>
+        <Card></Card>
+        <CardStatus></CardStatus>
+        <CardStatus></CardStatus>
+        <CardStatus></CardStatus>
+        <CardStatus></CardStatus>
       </div>
       <div className={classes.table}>
-        {" "}
-        <Table></Table>
+        <Table
+          columnsTable={deviceTableColumns}
+          dataTable={DevicesData}
+        ></Table>
       </div>
     </div>
   );
