@@ -6,18 +6,30 @@
   gap: 1vw;
 }
 
-.cards {
-  max-width: 800px;
-  width: 100%;
+.cardsDiv {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
-@media (max-width: 768px) {
-  .cards {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-start;
-  }
+.cards_left {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.cards_right {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }

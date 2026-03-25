@@ -15,13 +15,19 @@ type TableProps<TData> = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columnsTable: ColumnDef<TData, any>[];
   dataTable: TData[];
+  renderDetails?: (row: TData) => React.ReactNode;
 };
 
-const Table = <TData,>({ columnsTable, dataTable }: TableProps<TData>) => {
+const Table = <TData,>({
+  columnsTable,
+  dataTable,
+  renderDetails,
+}: TableProps<TData>) => {
   const data = useMemo(() => [...dataTable], [dataTable]);
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [selectedRow, setSelectedRow] = useState<TData | null>(null);
 
   const table = useReactTable({
     data,
@@ -69,7 +75,7 @@ const Table = <TData,>({ columnsTable, dataTable }: TableProps<TData>) => {
         </thead>
         <tbody className={classes.tbody}>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr key={row.id} onClick={() => setSelectedRow(row.original)}>
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -79,6 +85,19 @@ const Table = <TData,>({ columnsTable, dataTable }: TableProps<TData>) => {
           ))}
         </tbody>
       </table>
+      {selectedRow && renderDetails && (
+        <div className={classes.detailsPanel}>
+          <div className={classes.wrapper}>
+            <button
+              className={classes.exitButton}
+              onClick={() => setSelectedRow(null)}
+            >
+              X
+            </button>
+            {renderDetails(selectedRow)}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

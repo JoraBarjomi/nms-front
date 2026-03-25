@@ -36,6 +36,7 @@ export const alarmTableColumns = [
   }),
   columnHelper.accessor("status", {
     header: () => "Status",
+
     cell: (info) => <Status status={info.getValue() as string} />,
   }),
   columnHelper.accessor("device", {

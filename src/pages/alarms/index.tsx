@@ -25,8 +25,14 @@ export function AlarmsPage() {
     <div className={classes.content}>
       <div className={classes.cards}>
         <div className={classes.left_cards}>
-          <Card title={"Alarms"} text={totalAlarms} icon={AlarmsIcon}></Card>
           <Card
+            size="large"
+            title={"Alarms"}
+            text={totalAlarms}
+            icon={AlarmsIcon}
+          ></Card>
+          <Card
+            size="large"
             title={"Active"}
             text={activeAlarms}
             icon={HeartbeatIcon}
@@ -34,24 +40,28 @@ export function AlarmsPage() {
         </div>
         <div className={classes.right_cards}>
           <CardStatus
+            size="large"
             title={"Critical"}
             text={criticalAlarms}
             icon={DownIcon}
             status={"critical"}
           ></CardStatus>
           <CardStatus
+            size="large"
             title={"Major"}
             text={majorAlarms}
-            icon={MaintIcon}
+            icon={PlotIcon}
             status={"major"}
           ></CardStatus>
           <CardStatus
+            size="large"
             title={"Warning"}
             text={warningAlarms}
-            icon={PlotIcon}
+            icon={MaintIcon}
             status={"warning"}
           ></CardStatus>
           <CardStatus
+            size="large"
             title={"Closed"}
             text={closedAlarms}
             icon={UpIcon}
@@ -60,7 +70,18 @@ export function AlarmsPage() {
         </div>
       </div>
       <div className={classes.table}>
-        <Table columnsTable={alarmTableColumns} dataTable={AlarmsData}></Table>
+        <Table
+          columnsTable={alarmTableColumns}
+          dataTable={AlarmsData}
+          renderDetails={(row) => (
+            <div className={classes.info}>
+              <h3>Device: {row.device}</h3>
+              <p>Status: {row.status}</p>
+              <p>Probable cause: {row.probable_cause}</p>
+              <p>Specific problem: {row.spec_problem}</p>
+            </div>
+          )}
+        ></Table>
       </div>
     </div>
   );
