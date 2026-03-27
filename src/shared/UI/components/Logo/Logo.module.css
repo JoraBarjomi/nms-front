@@ -15,3 +15,23 @@
   font-style: normal;
   font-size: 24px;
 }
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.link:hover,
+.link:active,
+.link:visited {
+  text-decoration: none;
+}
+
+.logo_items:active {
+  transform: translateY(1px) scale(1.0002);
+  filter: drop-shadow(0 2px 6px #4a75c056);
+  color: #afcdff;
+}
+.logo_items svg {
+  transition: transform 1s ease;
+}

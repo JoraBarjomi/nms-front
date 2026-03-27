@@ -12,13 +12,17 @@ import Table from "../../widgets/Table/Table";
 import classes from "./alarms.module.css";
 import { alarmTableColumns } from "../../features/alarmTable/columnsAlarms";
 import { AlarmsData } from "../../entities/Alarms";
+import { countBy } from "../../shared/utils/countBy";
+import { ALL_STATUSES } from "../../shared/constants/allStatuses";
 
 const totalAlarms = AlarmsData.length;
-const activeAlarms = AlarmsData.filter((a) => a.status !== "closed").length;
-const criticalAlarms = AlarmsData.filter((a) => a.status === "critical").length;
-const majorAlarms = AlarmsData.filter((a) => a.status === "major").length;
-const warningAlarms = AlarmsData.filter((a) => a.status === "warning").length;
-const closedAlarms = AlarmsData.filter((a) => a.status === "closed").length;
+const activeAlarms = AlarmsData.filter(
+  (a) => a.status !== ALL_STATUSES.CLOSED,
+).length;
+const criticalAlarms = countBy(AlarmsData, ALL_STATUSES.CRITICAL);
+const majorAlarms = countBy(AlarmsData, ALL_STATUSES.MAJOR);
+const warningAlarms = countBy(AlarmsData, ALL_STATUSES.WARNING);
+const closedAlarms = countBy(AlarmsData, ALL_STATUSES.CLOSED);
 
 export function AlarmsPage() {
   return (

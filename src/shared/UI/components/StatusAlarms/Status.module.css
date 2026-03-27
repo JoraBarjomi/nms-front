@@ -6,31 +6,6 @@
   gap: 5px;
 }
 
-.card_critical,
-.card_major,
-.card_warning,
-.card_closed {
-  width: 19px;
-  height: 19px;
-  border-radius: 50%;
-}
-
-.card_critical {
-  background-color: #ff4c4c;
-}
-
-.card_major {
-  background-color: #ff9800;
-}
-
-.card_warning {
-  background-color: #ffcc00;
-}
-
-.card_closed {
-  background-color: #4cd964;
-}
-
 .h1 {
   font-family: "Poppins", sans-serif;
   font-weight: 400;

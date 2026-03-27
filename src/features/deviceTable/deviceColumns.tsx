@@ -2,6 +2,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { Status } from "../../shared/UI/components/StatusDevices/Status";
 import type { Device } from "../../entities/Device";
 import classes from "./deviceColumns.module.css";
+import type { AllStatuses } from "../../shared/constants/allStatuses";
 
 const columnHelper = createColumnHelper<Device>();
 export const deviceTableColumns = [
@@ -51,6 +52,6 @@ export const deviceTableColumns = [
   }),
   columnHelper.accessor("status", {
     header: () => "Status",
-    cell: (info) => <Status status={info.getValue() as string} />,
+    cell: (info) => <Status status={info.getValue() as AllStatuses} />,
   }),
 ];

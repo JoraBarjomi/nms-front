@@ -1,12 +1,12 @@
 import React from "react";
-import classes from "./ButtonMenu.module.css";
+import classes from "./ButtonAction.module.css";
 
 type ButtonProps = {
   children: React.ReactNode;
   active?: boolean;
 };
 
-export function ButtonMenu({ children, active }: ButtonProps) {
+export function ButtonAction({ children, active }: ButtonProps) {
   return (
     <button
       className={

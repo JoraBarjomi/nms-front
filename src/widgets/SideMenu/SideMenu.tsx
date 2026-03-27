@@ -6,7 +6,7 @@ export function SideMenu() {
   return (
     <menu className={classes.menu}>
       <Logo />
-      <ListMenu></ListMenu>
+      <ListMenu />
     </menu>
   );
 }

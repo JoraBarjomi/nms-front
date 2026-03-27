@@ -18,71 +18,91 @@ export function ListMenu() {
     <menu className={classes.menuBar}>
       <li>
         <NavLink to="/" className={classes.link}>
-          <ButtonMenu>
-            {" "}
-            <HomeIcon /> Home
-          </ButtonMenu>
+          {({ isActive }) => (
+            <ButtonMenu active={isActive}>
+              {" "}
+              <HomeIcon /> Home
+            </ButtonMenu>
+          )}
         </NavLink>
       </li>
       <li>
         <NavLink to="/dashboard" className={classes.link}>
-          <ButtonMenu>
-            {" "}
-            <DashboardIcon />
-            Dashboard
-          </ButtonMenu>
+          {({ isActive }) => (
+            <ButtonMenu active={isActive}>
+              {" "}
+              <DashboardIcon />
+              Dashboard
+            </ButtonMenu>
+          )}
         </NavLink>
       </li>
       <li>
         <NavLink to="/alarms" className={classes.link}>
-          <ButtonMenu>
-            {" "}
-            <AlertIcon />
-            Alarms
-          </ButtonMenu>
+          {({ isActive }) => (
+            <ButtonMenu active={isActive}>
+              {" "}
+              <AlertIcon />
+              Alarms
+            </ButtonMenu>
+          )}
         </NavLink>
       </li>
       <li>
         <NavLink to="/devices" className={classes.link}>
-          <ButtonMenu>
-            {" "}
-            <DevicesIcon />
-            Devices
-          </ButtonMenu>
+          {({ isActive }) => (
+            <ButtonMenu active={isActive}>
+              {" "}
+              <DevicesIcon />
+              Devices
+            </ButtonMenu>
+          )}
         </NavLink>
       </li>
       <li>
         <NavLink to="/logs" className={classes.link}>
-          <ButtonMenu>
-            {" "}
-            <LogsIcon />
-            Logs
-          </ButtonMenu>
+          {({ isActive }) => (
+            <ButtonMenu active={isActive}>
+              {" "}
+              <LogsIcon />
+              Logs
+            </ButtonMenu>
+          )}
         </NavLink>
       </li>
       <li>
         <NavLink to="/config" className={classes.link}>
-          <ButtonMenu>
-            {" "}
-            <ConfigIcon />
-            Config
-          </ButtonMenu>
+          {({ isActive }) => (
+            <ButtonMenu active={isActive}>
+              {" "}
+              <ConfigIcon />
+              Config
+            </ButtonMenu>
+          )}
         </NavLink>
       </li>
       <menu className={classes.bottomMenu}>
         <li>
-          <ButtonMenu>
-            {" "}
-            <SupportIcon />
-            Support
-          </ButtonMenu>
+          <NavLink to="/support" className={classes.link}>
+            {({ isActive }) => (
+              <ButtonMenu active={isActive}>
+                {" "}
+                <SupportIcon />
+                Support
+              </ButtonMenu>
+            )}
+          </NavLink>
         </li>
         <li>
-          <ButtonMenu>
-            {" "}
-            <SettingsIcon />
-            Settings
-          </ButtonMenu>
+          <NavLink to="/settings" className={classes.link}>
+            {({ isActive }) => (
+              <ButtonMenu active={isActive}>
+                {" "}
+                <SettingsIcon />
+                Settings
+              </ButtonMenu>
+            )}
+          </NavLink>
         </li>
       </menu>
     </menu>

@@ -85,33 +85,3 @@
   flex-shrink: 0;
   margin-left: 10px;
 }
-
-.critical,
-.major,
-.warning,
-.maint,
-.closed {
-  width: 19px;
-  height: 19px;
-  border-radius: 50%;
-}
-
-.critical {
-  background-color: #ff4c4c;
-}
-
-.major {
-  background-color: #ff9800;
-}
-
-.warning {
-  background-color: #ffcc00;
-}
-
-.maint {
-  background-color: #2296f3;
-}
-
-.closed {
-  background-color: #4cd964;
-}

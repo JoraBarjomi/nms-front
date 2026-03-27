@@ -16,8 +16,8 @@
   background-color: rgba(255, 255, 255, 0.08);
 }
 .checkbox:checked {
-  background-color: #40bc55;
-  border-color: #4cd963;
+  background-color: var(--color-success);
+  border-color: var(--color-success);
 }
 
 .checkbox:checked::after {
@@ -41,17 +41,4 @@
 .statusDiv {
   width: 4px;
   height: 30px;
-}
-
-.down {
-  background-color: #ff4c4c;
-}
-.maint {
-  background-color: #ff9800;
-}
-.deg {
-  background-color: #ffcc00;
-}
-.up {
-  background-color: #4cd964;
 }

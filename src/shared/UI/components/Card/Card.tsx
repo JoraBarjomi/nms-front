@@ -1,9 +1,8 @@
+import { type Size } from "../../../constants/sizeCard";
 import classes from "./Card.module.css";
 
-type CardSize = "small" | "medium" | "large";
-
 type CardProps = {
-  size?: CardSize;
+  size?: Size;
   title?: React.ReactNode;
   text?: React.ReactNode;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;

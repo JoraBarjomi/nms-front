@@ -1,7 +1,8 @@
 import classes from "./Status.module.css";
+import { type AllStatuses } from "../../../constants/allStatuses";
 
 type StatusProps = {
-  status?: React.ReactNode;
+  status?: AllStatuses;
 };
 
 export function Status({ status }: StatusProps) {
@@ -9,22 +10,22 @@ export function Status({ status }: StatusProps) {
     <>
       {status === "critical" ? (
         <div className={classes.content}>
-          <div className={classes.card_critical}></div>
+          <div className={"critical"}></div>
           <h1 className={classes.h1}>Critical</h1>
         </div>
       ) : status === "major" ? (
         <div className={classes.content}>
-          <div className={classes.card_major}></div>
+          <div className={"major"}></div>
           <h1 className={classes.h1}>Major</h1>
         </div>
       ) : status === "warning" ? (
         <div className={classes.content}>
-          <div className={classes.card_warning}></div>
+          <div className={"warning"}></div>
           <h1 className={classes.h1}>Warning</h1>
         </div>
       ) : status === "closed" ? (
         <div className={classes.content}>
-          <div className={classes.card_closed}></div>
+          <div className={"closed"}></div>
 
           <h1 className={classes.h1}>Closed</h1>
         </div>

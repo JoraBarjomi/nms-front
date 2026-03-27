@@ -1,14 +1,13 @@
+import { type Size } from "../../../../constants/sizeCard";
+import { type AllStatuses } from "../../../../constants/allStatuses";
 import classes from "../Card.module.css";
 
-type CardSize = "small" | "medium" | "large";
-type CardStatus = "critical" | "major" | "warning" | "maint" | "closed";
-
 type CardProps = {
-  size?: CardSize;
+  size?: Size;
   title?: React.ReactNode;
   text?: React.ReactNode;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-  status?: CardStatus;
+  status?: AllStatuses;
 };
 
 export function CardStatus({
@@ -27,7 +26,7 @@ export function CardStatus({
       </div>
       <div className={classes.card_status}>
         {Icon && <Icon className={classes.card_icon} />}
-        <div className={`${status ? classes[status] : ""}`}></div>
+        <div className={status}></div>
       </div>
     </div>
   );

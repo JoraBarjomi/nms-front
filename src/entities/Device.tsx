@@ -1,9 +1,13 @@
+import { type AllStatuses } from "../shared/constants/allStatuses";
+import { type AllDevices } from "../shared/constants/allDevices";
+
 export type Device = {
   device: string;
-  type: string;
+  type: AllDevices;
   uptime: string;
   load: number;
-  status: string;
+  status: AllStatuses;
+  ip?: string;
 };
 
 export const DevicesData: Device[] = [
@@ -13,6 +17,7 @@ export const DevicesData: Device[] = [
     uptime: "2h14min",
     load: 32,
     status: "up",
+    ip: "192.168.0.3",
   },
   {
     device: "BS-101",
@@ -27,6 +32,7 @@ export const DevicesData: Device[] = [
     uptime: "0d",
     load: 10,
     status: "maint",
+    ip: "10.34.3.17",
   },
   {
     device: "BS-739",
@@ -41,5 +47,6 @@ export const DevicesData: Device[] = [
     uptime: "0d",
     load: 0,
     status: "down",
+    ip: "192.168.0.43",
   },
 ];

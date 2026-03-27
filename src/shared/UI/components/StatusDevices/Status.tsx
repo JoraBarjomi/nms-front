@@ -1,7 +1,8 @@
 import classes from "./Status.module.css";
+import { type AllStatuses } from "../../../constants/allStatuses";
 
 type StatusProps = {
-  status?: React.ReactNode;
+  status?: AllStatuses;
 };
 
 export function Status({ status }: StatusProps) {
@@ -9,22 +10,22 @@ export function Status({ status }: StatusProps) {
     <>
       {status === "down" ? (
         <div className={classes.content}>
-          <div className={classes.card_down}></div>
+          <div className={"down"}></div>
           <h1 className={classes.h1}>Down</h1>
         </div>
       ) : status === "maint" ? (
         <div className={classes.content}>
-          <div className={classes.card_maint}></div>
+          <div className={"maint"}></div>
           <h1 className={classes.h1}>Maint</h1>
         </div>
       ) : status === "deg" ? (
         <div className={classes.content}>
-          <div className={classes.card_deg}></div>
+          <div className={"deg"}></div>
           <h1 className={classes.h1}>Degraded</h1>
         </div>
       ) : status === "up" ? (
         <div className={classes.content}>
-          <div className={classes.card_up}></div>
+          <div className={"up"}></div>
           <h1 className={classes.h1}>Up</h1>
         </div>
       ) : null}

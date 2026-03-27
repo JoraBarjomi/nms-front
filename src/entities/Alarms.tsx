@@ -1,5 +1,7 @@
+import { type AllStatuses } from "../shared/constants/allStatuses";
+
 export type Alarms = {
-  status: string;
+  status: AllStatuses;
   device: string;
   probable_cause: string;
   spec_problem: string;

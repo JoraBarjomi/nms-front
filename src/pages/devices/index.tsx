@@ -18,15 +18,19 @@ import classes from "./devices.module.css";
 import Table from "../../widgets/Table/Table";
 import { DevicesData } from "../../entities/Device";
 import { deviceTableColumns } from "../../features/deviceTable/deviceColumns";
+import { countBy } from "../../shared/utils/countBy";
+import { ALL_STATUSES } from "../../shared/constants/allStatuses";
+import { ALL_DEVICES } from "../../shared/constants/allDevices";
+
 export function DevicesPage() {
   const totalDevices = DevicesData.length;
-  const activeCells = DevicesData.filter((a) => a.type === "eNodeB").length;
-  const activeRouters = DevicesData.filter((a) => a.type === "router").length;
-  const activeSwitches = DevicesData.filter((a) => a.type === "switch").length;
-  const downDevices = DevicesData.filter((a) => a.status === "down").length;
-  const upDevices = DevicesData.filter((a) => a.status === "up").length;
-  const maintDevices = DevicesData.filter((a) => a.status === "maint").length;
-  const degDevices = DevicesData.filter((a) => a.status === "deg").length;
+  const activeCells = countBy(DevicesData, ALL_DEVICES.ENODEB);
+  const activeRouters = countBy(DevicesData, ALL_DEVICES.ROUTER);
+  const activeSwitches = countBy(DevicesData, ALL_DEVICES.SWITCH);
+  const downDevices = countBy(DevicesData, ALL_STATUSES.DOWN);
+  const upDevices = countBy(DevicesData, ALL_STATUSES.UP);
+  const maintDevices = countBy(DevicesData, ALL_STATUSES.MAINT);
+  const degDevices = countBy(DevicesData, ALL_STATUSES.DEG);
 
   return (
     <div className={classes.content}>
@@ -49,7 +53,7 @@ export function DevicesPage() {
             title={"UP"}
             text={upDevices}
             icon={UpIcon}
-            status={"closed"}
+            status={"up"}
           ></CardStatus>
           <CardStatus
             size="medium"
@@ -75,14 +79,14 @@ export function DevicesPage() {
             title={"DOWN"}
             text={downDevices}
             icon={DownIcon}
-            status={"critical"}
+            status={"down"}
           ></CardStatus>
           <CardStatus
             size="medium"
             title={"DEGRADED"}
             text={degDevices}
             icon={PlotIcon}
-            status={"warning"}
+            status={"deg"}
           ></CardStatus>
         </div>
         <div className={classes.cards_right}>
@@ -110,6 +114,7 @@ export function DevicesPage() {
               <p>Uptime: {row.uptime}</p>
               <p>Load: {row.load}</p>
               <p>Status: {row.status}</p>
+              <p>Ip: {row.ip}</p>
             </div>
           )}
         ></Table>

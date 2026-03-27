@@ -16,8 +16,8 @@
   background-color: rgba(255, 255, 255, 0.08);
 }
 .checkbox:checked {
-  background-color: #40bc55;
-  border-color: #4cd963;
+  background-color: var(--color-success);
+  border-color: var(--color-success);
 }
 
 .checkbox:checked::after {
@@ -27,7 +27,7 @@
   top: 0px;
   width: 5px;
   height: 10px;
-  border: solid white;
+  border: solid var(--color-text-primary);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -44,14 +44,14 @@
 }
 
 .critical {
-  background-color: #ff4c4c;
+  background-color: var(--color-error);
 }
 .major {
-  background-color: #ff9800;
+  background-color: var(--color-major);
 }
 .warning {
-  background-color: #ffcc00;
+  background-color: var(--color-warning);
 }
 .closed {
-  background-color: #4cd964;
+  background-color: var(--color-success);
 }

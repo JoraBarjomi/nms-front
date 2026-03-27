@@ -1,7 +1,7 @@
 .table_div {
   width: 100%;
   border-radius: 10px;
-  background: #333333;
+  background: var(--color-surface);
   padding: 1rem;
 
   position: relative;
@@ -13,11 +13,11 @@ table {
   border-collapse: collapse;
   table-layout: fixed;
   font-family: "Poppins", sans-serif;
-  color: white;
+  color: var(--color-text-primary);
 }
 
 .thead {
-  border-bottom: 2px solid #242424;
+  border-bottom: 2px solid var(--color-background-second);
   cursor: pointer;
   user-select: none;
 }
@@ -35,14 +35,14 @@ th {
   padding: 12px 16px;
   font-weight: 600;
   font-style: normal;
-  color: #666;
+  color: var(--color-disabled);
   text-transform: uppercase;
   font-size: 0.85rem;
   letter-spacing: 0.5px;
 }
 
 tr {
-  border-bottom: 1px solid #242424;
+  border-bottom: 1px solid var(--color-background-second);
   transition: background-color 0.2s;
 }
 
@@ -73,10 +73,10 @@ td:first-child {
   background-color: transparent;
   font-family: "Poppins", sans-serif;
   padding: 5px 7px;
-  color: white;
+  color: var(--color-text-primary);
   font-size: 0.85rem;
   cursor: pointer;
-  border: 2px solid #666;
+  border: 2px solid var(--color-disabled);
   border-radius: 8px;
   outline: none;
   transition: all 0.2s ease;
@@ -88,13 +88,13 @@ td:first-child {
 }
 
 .searchbar:focus {
-  border-color: #afcdff;
+  border-color: var(--color-focus);
   background-color: rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 0 4px rgba(175, 205, 255, 0.15);
 }
 
 .searchbar::placeholder {
-  color: #666;
+  color: var(--color-disabled);
   transition: opacity 0.2s ease;
 }
 
@@ -108,12 +108,13 @@ td:first-child {
   right: 0;
   width: 420px;
   height: 100%;
-  background: #2c2c2c;
+  border-radius: 10px;
+  background: var(--color-background-first);
   padding: 16px;
 }
 
 .wrapper {
-  position: fixed;
+  position: absolute;
   display: flex;
   gap: 10px;
 }
@@ -124,25 +125,70 @@ td:first-child {
   height: 30px;
   padding: 5px;
   font-size: 18px;
-  color: white;
-  background-color: #242424;
+  color: var(--color-text-primary);
+  background-color: var(--color-background-second);
   border-radius: 8px;
-  transition: all 0.2 ease;
+  transition: all 0.2s ease;
 
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-style: normal;
 
-  color: #9d9d9d;
+  color: var(--color-text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .exitButton:hover {
-  color: white;
-  background-color: #333333;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
   transform: translateY(1px);
 }
 .exitButton:active {
-  color: #afcdff;
+  color: var(--color-focus);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.actionButton {
+  background-color: transparent;
+  font-family: "Poppins", sans-serif;
+  padding: 5px 7px;
+  color: var(--color-text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 2px solid var(--color-disabled);
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+  color: var(--color-disabled);
+}
+
+.actionButton:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.actionButton:focus {
+  border-color: var(--color-focus);
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 4px rgba(175, 205, 255, 0.15);
+}
+
+.actionButton::after {
+  color: var(--color-text-primary);
+  transition: opacity 0.2s ease;
+}
+
+.actionButton:focus::placeholder {
+  opacity: 0.5;
 }

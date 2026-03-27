@@ -6,6 +6,7 @@ import {
   useReactTable,
   type SortingState,
   type ColumnDef,
+  getExpandedRowModel,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import classes from "./Table.module.css";
@@ -27,12 +28,14 @@ const Table = <TData,>({
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
-  const [selectedRow, setSelectedRow] = useState<TData | null>(null);
+  const [expanded, setExpanded] = useState({});
 
   const table = useReactTable({
     data,
     columns: columnsTable,
-    state: { rowSelection, sorting, globalFilter },
+    state: { rowSelection, sorting, globalFilter, expanded },
+    onExpandedChange: setExpanded,
+    getExpandedRowModel: getExpandedRowModel(),
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -40,15 +43,37 @@ const Table = <TData,>({
     onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
   });
+
+  const selectedCount = table.getSelectedRowModel().rows.length;
+
   return (
     <div className={classes.table_div}>
-      <div className={classes.searchDiv}>
-        <input
-          className={classes.searchbar}
-          value={globalFilter}
-          onChange={(e) => setGlobalFilter(String(e.target.value))}
-          placeholder="Search"
-        />
+      <div className={classes.actions}>
+        <div className={classes.actionButtons}>
+          <button
+            className={classes.actionButton}
+            onClick={() => table.toggleAllRowsSelected()}
+          >
+            All
+          </button>
+          <button className={classes.actionButton}>
+            Selected({selectedCount})
+          </button>
+          <button
+            className={classes.actionButton}
+            onClick={() => setSorting([])}
+          >
+            Sort
+          </button>
+        </div>
+        <div className={classes.searchDiv}>
+          <input
+            className={classes.searchbar}
+            value={globalFilter}
+            onChange={(e) => setGlobalFilter(String(e.target.value))}
+            placeholder="Search"
+          />
+        </div>
       </div>
       <table>
         <thead className={classes.thead}>
@@ -75,29 +100,25 @@ const Table = <TData,>({
         </thead>
         <tbody className={classes.tbody}>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} onClick={() => setSelectedRow(row.original)}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
+            <>
+              <tr key={row.id} onClick={() => row.toggleExpanded()}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+              {row.getIsExpanded() && renderDetails && (
+                <tr>
+                  <td colSpan={row.getVisibleCells().length}>
+                    {renderDetails(row.original)}
+                  </td>
+                </tr>
+              )}
+            </>
           ))}
         </tbody>
       </table>
-      {selectedRow && renderDetails && (
-        <div className={classes.detailsPanel}>
-          <div className={classes.wrapper}>
-            <button
-              className={classes.exitButton}
-              onClick={() => setSelectedRow(null)}
-            >
-              X
-            </button>
-            {renderDetails(selectedRow)}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
