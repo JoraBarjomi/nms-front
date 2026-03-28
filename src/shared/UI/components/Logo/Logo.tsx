@@ -4,7 +4,7 @@ import classes from "./Logo.module.css";
 
 export function Logo() {
   return (
-    <NavLink to="/" className={classes.link}>
+    <NavLink to="/" className="link">
       <div className={classes.logo_items}>
         <LogoIcon />
         <h1 className={classes.poppins_medium}>NMS</h1>

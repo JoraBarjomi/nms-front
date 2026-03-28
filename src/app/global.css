@@ -58,3 +58,14 @@
   height: 19px;
   border-radius: 50%;
 }
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.link:hover,
+.link:active,
+.link:visited {
+  text-decoration: none;
+}
