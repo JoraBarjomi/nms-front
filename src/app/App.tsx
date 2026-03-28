@@ -23,6 +23,7 @@ const App: React.FC = () => {
   const layoutPages = [
     "/",
     "/dashboard",
+    "/devices",
     "/alarms",
     "/logs",
     "/config",
