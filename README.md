@@ -1,9 +1,21 @@
-# NMS Front 
+# NMS Front
 
----
+Network Management System Frontend — a modern SPA for monitoring and configuring network devices.
 
-Network Management System Frontend — современное SPA приложение для мониторинга и управления сетевыми устройствами с использованием Feature-Sliced Design архитектуры.
+## Tech Stack
+- **React 19** + **TypeScript** + **Vite**
+- **UI & Styling:** MUI v7, Emotion, CSS Modules
+- **Charts & Tables:** Recharts, TanStack React Table
+- **Routing:** React Router v7
 
-### React + TypeScript + Vite
+## Getting Started
 
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
+2. **Run development server:**
+   ```bash
+   npm run dev
+   ```
