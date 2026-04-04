@@ -1,11 +1,15 @@
 import React from "react";
-import classes from "./ButtonAction.module.css";
+import classes from "./ButtonActionOutlined.module.css";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   active?: boolean;
 }
 
-export function ButtonAction({ children, active, ...props }: ButtonProps) {
+export function ButtonActionOutlined({
+  children,
+  active,
+  ...props
+}: ButtonProps) {
   return (
     <button
       {...props}

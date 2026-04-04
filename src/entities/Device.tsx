@@ -16,7 +16,7 @@ export const DevicesData: Device[] = [
     type: "eNodeB",
     uptime: "2h14min",
     load: 32,
-    status: "up",
+    status: "active",
     ip: "192.168.0.3",
   },
   {
@@ -24,7 +24,7 @@ export const DevicesData: Device[] = [
     type: "eNodeB",
     uptime: "32d9h",
     load: 67,
-    status: "up",
+    status: "active",
   },
   {
     device: "BS-113",

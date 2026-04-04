@@ -1,9 +1,13 @@
 import React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useState } from "react";
+
+import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
 import { SideMenu } from "../widgets/SideMenu/SideMenu";
 import { Header } from "../widgets/Header/Header";
-import classes from "./App.module.css";
+import { Submenu } from "../shared/UI/components/Submenu/Submenu";
 
-import { Routes, Route, useLocation } from "react-router-dom";
 import { HomePage } from "../pages/home/index";
 import { DashboardPage } from "../pages/dashboard/index";
 import { AlarmsPage } from "../pages/alarms/index";
@@ -16,12 +20,31 @@ import { SettingsPage } from "../pages/settings";
 import { ProfilePage } from "../pages/profile";
 import { RegisterPage } from "../pages/register";
 import { LoginPage } from "../pages/login";
+import { AddPage } from "../pages/add";
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  padding: theme.spacing(0, 1),
+  ...theme.mixins.toolbar,
+}));
 
 const App: React.FC = () => {
   const location = useLocation();
+  const [open, setOpen] = useState(true);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
 
   const layoutPages = [
     "/",
+    "/add",
     "/dashboard",
     "/devices",
     "/alarms",
@@ -36,6 +59,8 @@ const App: React.FC = () => {
     switch (pathname) {
       case "/":
         return "Home";
+      case "/add":
+        return "Add";
       case "/dashboard":
         return "Dashboard";
       case "/alarms":
@@ -71,17 +96,40 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className={classes.layout}>
-      <SideMenu />
-      <div className={classes.body}>
+    <Box
+      sx={{
+        display: "flex",
+        height: "100vh",
+        backgroundColor: "background.default",
+      }}
+    >
+      <SideMenu open={open} handleDrawerClose={handleDrawerClose} />
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
+      >
         <Header
+          open={open}
+          handleDrawerOpen={handleDrawerOpen}
           curPage={getPageTitle(location.pathname)}
           userInfo={"G"}
           isLogin={false}
+          submenu={
+            (location.pathname === "/" || location.pathname === "/add") && (
+              <Submenu
+                items={[
+                  { to: "/", label: "Network Elements" },
+                  { to: "/add", label: "Add Element" },
+                ]}
+              />
+            )
+          }
         />
-        <main className={classes.content}>
+        <DrawerHeader />
+        <Box sx={{ p: 3, flexGrow: 1, color: "text.primary" }}>
           <Routes>
             <Route path="/" element={<HomePage />}></Route>
+            <Route path="/add" element={<AddPage />}></Route>
             <Route path="/dashboard" element={<DashboardPage />}></Route>
             <Route path="/alarms" element={<AlarmsPage />}></Route>
             <Route path="/devices" element={<DevicesPage />}></Route>
@@ -92,9 +140,9 @@ const App: React.FC = () => {
             <Route path="/profile" element={<ProfilePage />}></Route>
             <Route path="*" element={<NotFoundPage />}></Route>
           </Routes>
-        </main>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

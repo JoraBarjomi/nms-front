@@ -27,7 +27,7 @@
 
 .styled:hover {
   color: var(--color-text-primary);
-  background: #3333337a;
+  background: var(--color-primary);
   transform: translateY(1px);
 }
 
@@ -49,5 +49,5 @@
 
 .active {
   color: white;
-  background: #333333;
+  background: var(--color-primary-bg);
 }

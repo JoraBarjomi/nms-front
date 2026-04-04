@@ -7,56 +7,24 @@
   --color-text-primary: #ffffff;
   --color-text-secondary: #cccccc;
   --color-primary: #4267b1;
+  --color-primary-hover: #5a7fd1;
+  --color-primary-active: #2f4f8a;
+  --color-primary-bg: rgba(66, 103, 177, 0.12);
   --color-on-primary: #ffffff;
   --color-success: #4dda64;
   --color-maint: #2296f3;
   --color-warning: #ffc107;
   --color-major: #ff9800;
   --color-error: #ff4d4d;
-  --color-disabled: #777777;
+  --color-disabled: #b0b0b0;
   --color-focus: rgba(66, 103, 177, 0.6);
 }
 
-* {
+html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-.critical,
-.down {
-  background-color: var(--color-error);
-}
-
-.major {
-  background-color: var(--color-major);
-}
-
-.warning,
-.deg {
-  background-color: var(--color-warning);
-}
-
-.maint {
-  background-color: var(--color-maint);
-}
-
-.closed,
-.up {
-  background-color: var(--color-success);
-}
-
-.critical,
-.major,
-.warning,
-.maint,
-.closed,
-.up,
-.down,
-.deg {
-  width: 19px;
-  height: 19px;
-  border-radius: 50%;
+  overflow: auto;
 }
 
 .link {
@@ -68,4 +36,4 @@
 .link:active,
 .link:visited {
   text-decoration: none;
-}
+} 

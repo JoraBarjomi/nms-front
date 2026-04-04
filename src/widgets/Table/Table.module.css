@@ -51,10 +51,19 @@ tr:hover {
   background-color: rgba(255, 255, 255, 0.08);
 }
 
+.expandedRow {
+  border-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
 td {
   padding: 16px;
   font-size: 1.05rem;
   text-align: left;
+}
+
+.details {
+  padding: 0 0 16px;
 }
 
 th:first-child,
@@ -85,6 +94,8 @@ td:first-child {
 .searchbar:hover {
   border-color: rgba(255, 255, 255, 0.4);
   background-color: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-text-primary);
 }
 
 .searchbar:focus {
@@ -98,54 +109,18 @@ td:first-child {
   transition: opacity 0.2s ease;
 }
 
-.searchbar:focus::placeholder {
-  opacity: 0.5;
+.searchbar:hover::placeholder {
+  color: var(--color-text-primary);
 }
 
-.detailsPanel {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 420px;
-  height: 100%;
-  border-radius: 10px;
-  background: var(--color-background-first);
-  padding: 16px;
+.searchbar:focus::placeholder {
+  opacity: 0.5;
 }
 
 .wrapper {
   position: absolute;
   display: flex;
   gap: 10px;
-}
-
-.exitButton {
-  border: 0;
-  width: 30px;
-  height: 30px;
-  padding: 5px;
-  font-size: 18px;
-  color: var(--color-text-primary);
-  background-color: var(--color-background-second);
-  border-radius: 8px;
-  transition: all 0.2s ease;
-
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-
-  color: var(--color-text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.exitButton:hover {
-  color: var(--color-text-primary);
-  background-color: var(--color-surface);
-  transform: translateY(1px);
-}
-.exitButton:active {
-  color: var(--color-focus);
 }
 
 .actions {
@@ -170,18 +145,12 @@ td:first-child {
   border-radius: 8px;
   outline: none;
   transition: all 0.2s ease;
-  color: var(--color-disabled);
+  color: var(--color-text-primary);
 }
 
 .actionButton:hover {
-  border-color: rgba(255, 255, 255, 0.4);
-  background-color: rgba(255, 255, 255, 0.08);
-}
-
-.actionButton:focus {
-  border-color: var(--color-focus);
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 0 4px rgba(175, 205, 255, 0.15);
+  background-color: var(--color-disabled);
+  color: var(--color-text-primary);
 }
 
 .actionButton::after {
@@ -191,4 +160,49 @@ td:first-child {
 
 .actionButton:focus::placeholder {
   opacity: 0.5;
+}
+
+.checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 19px;
+  height: 19px;
+  border: 2px solid #666;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.checkbox:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+.checkbox:checked {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--color-text-primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.checkboxDiv {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.statusDiv {
+  width: 4px;
+  height: 30px;
 }

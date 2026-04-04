@@ -101,7 +101,11 @@ const Table = <TData,>({
         <tbody className={classes.tbody}>
           {table.getRowModel().rows.map((row) => (
             <>
-              <tr key={row.id} onClick={() => row.toggleExpanded()}>
+              <tr
+                key={row.id}
+                className={`${row.getIsExpanded() ? classes.expandedRow : ""}`}
+                onClick={() => row.toggleExpanded()}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -110,7 +114,10 @@ const Table = <TData,>({
               </tr>
               {row.getIsExpanded() && renderDetails && (
                 <tr>
-                  <td colSpan={row.getVisibleCells().length}>
+                  <td
+                    className={classes.details}
+                    colSpan={row.getVisibleCells().length}
+                  >
                     {renderDetails(row.original)}
                   </td>
                 </tr>

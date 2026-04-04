@@ -1,0 +1,11 @@
+.submenu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0;
+}
+
+.separator {
+  color: var(--color-disabled);
+  user-select: none;
+}

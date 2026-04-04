@@ -1,5 +1,5 @@
 export const ALL_STATUSES = {
-  UP: "up",
+  ACTIVE: "active",
   DOWN: "down",
   MAINT: "maint",
   DEG: "deg",

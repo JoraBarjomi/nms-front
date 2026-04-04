@@ -1,0 +1,137 @@
+.content {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 1vw;
+}
+
+.cardsDiv {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.cards_left {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.cards_right {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.info {
+  border-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 24px 32px;
+  margin: 0;
+  animation: fadeIn 0.2s ease-out;
+  border-end-start-radius: 8px;
+  border-end-end-radius: 8px;
+}
+
+.info_header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.info_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.detail_item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail_item span,
+.capabilities_section span {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--color-disabled);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.detail_item p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.capabilities_section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tags_list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--color-text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.deleteBtn {
+  background: transparent;
+  color: #ff4d4f;
+  border: 1px solid #ff4d4f;
+  padding: 6px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.deleteBtn:hover {
+  background: #ff4d4f;
+  color: white;
+}
+
+.submenu {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 24px;
+  padding: 0;
+  border-bottom: 1px solid var(--color-surface);
+}
+
+.link {
+  composes: link from global;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 1rem;
+  padding: 12px 4px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+  color: var(--color-disabled);
+}
+
+.link:hover {
+  color: var(--color-text-primary);
+}
+
+.activeLink {
+  color: var(--color-primary) !important;
+  font-weight: 600;
+}

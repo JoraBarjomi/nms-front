@@ -1,36 +1,26 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { Status } from "../../shared/UI/components/StatusDevices/Status";
+import { Status } from "../../shared/UI/components/Status/Status";
 import type { Device } from "../../entities/Device";
-import classes from "./deviceColumns.module.css";
 import type { AllStatuses } from "../../shared/constants/allStatuses";
+import { Checkbox } from "../../shared/UI/components/Checkbox/Checkbox";
 
 const columnHelper = createColumnHelper<Device>();
 export const deviceTableColumns = [
   columnHelper.display({
     id: "selected",
     header: ({ table }) => (
-      <div className={classes.checkboxDiv}>
-        <div className={classes.statusDiv} />
-        <input
-          type="checkbox"
-          className={classes.checkbox}
-          checked={table.getIsAllRowsSelected()}
-          onChange={table.getToggleAllPageRowsSelectedHandler()}
-        />
-      </div>
+      <Checkbox
+        checked={table.getIsAllRowsSelected()}
+        onChange={table.getToggleAllPageRowsSelectedHandler()}
+      />
     ),
     cell: ({ row }) => {
       return (
-        <div className={classes.checkboxDiv}>
-          <div className={classes.statusDiv} />
-          <input
-            type="checkbox"
-            className={classes.checkbox}
-            checked={row.getIsSelected()}
-            disabled={!row.getCanSelect()}
-            onChange={row.getToggleSelectedHandler()}
-          />
-        </div>
+        <Checkbox
+          checked={row.getIsSelected()}
+          disabled={!row.getCanSelect()}
+          onChange={row.getToggleSelectedHandler()}
+        />
       );
     },
   }),

@@ -1,14 +1,20 @@
 import { NavLink } from "react-router-dom";
 import { LogoIcon } from "../../icons/icons";
-import classes from "./Logo.module.css";
 
-export function Logo() {
+import Typography from "@mui/material/Typography";
+import { Box } from "@mui/material";
+
+type LogoProps = {
+  open?: boolean;
+}
+
+export function Logo({open}: LogoProps) {
   return (
-    <NavLink to="/" className="link">
-      <div className={classes.logo_items}>
+    <NavLink to="/" style={{ textDecoration: 'none', color: 'inherit'}}>
+      <Box sx={{display: 'flex', alignItems: 'center', gap: '8px'}}>
         <LogoIcon />
-        <h1 className={classes.poppins_medium}>NMS</h1>
-      </div>
+        {open && (<Typography variant="h6" component="h1" color="text.primary" sx={{fontWeight: 600, fontSize: 24}}>NMS</Typography>)}
+      </Box>
     </NavLink>
   );
 }

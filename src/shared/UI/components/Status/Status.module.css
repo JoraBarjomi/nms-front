@@ -1,0 +1,50 @@
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  gap: 5px;
+}
+
+.h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.05rem;
+}
+
+.critical,
+.down {
+  background-color: var(--color-error);
+}
+
+.major {
+  background-color: var(--color-major);
+}
+
+.warning,
+.deg {
+  background-color: var(--color-warning);
+}
+
+.maint {
+  background-color: var(--color-maint);
+}
+
+.closed,
+.activeStatus {
+  background-color: var(--color-success);
+}
+
+.critical,
+.major,
+.warning,
+.maint,
+.closed,
+.activeStatus,
+.down,
+.deg {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+}

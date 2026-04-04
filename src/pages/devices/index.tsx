@@ -28,7 +28,7 @@ export function DevicesPage() {
   const activeRouters = countBy(DevicesData, ALL_DEVICES.ROUTER);
   const activeSwitches = countBy(DevicesData, ALL_DEVICES.SWITCH);
   const downDevices = countBy(DevicesData, ALL_STATUSES.DOWN);
-  const upDevices = countBy(DevicesData, ALL_STATUSES.UP);
+  const upDevices = countBy(DevicesData, ALL_STATUSES.ACTIVE);
   const maintDevices = countBy(DevicesData, ALL_STATUSES.MAINT);
   const degDevices = countBy(DevicesData, ALL_STATUSES.DEG);
 
@@ -50,10 +50,10 @@ export function DevicesPage() {
           ></Card>
           <CardStatus
             size="medium"
-            title={"UP"}
+            title={"ACTIVE"}
             text={upDevices}
             icon={UpIcon}
-            status={"up"}
+            status={"active"}
           ></CardStatus>
           <CardStatus
             size="medium"

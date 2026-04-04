@@ -1,0 +1,47 @@
+.styled {
+  background-color: transparent;
+  padding: 6px 14px;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  cursor: text;
+  border: 2px solid var(--color-disabled);
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.styled:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.styled:focus {
+  border-color: var(--color-primary);
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 4px rgba(175, 205, 255, 0.15);
+}
+
+.styled::placeholder {
+  color: var(--color-disabled);
+  transition: opacity 0.2s ease;
+}
+
+.styled:hover::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.styled:focus::placeholder {
+  opacity: 0.5;
+}
+
+.labelBox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
+}

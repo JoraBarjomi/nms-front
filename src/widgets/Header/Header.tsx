@@ -1,29 +1,87 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import classes from "./Header.module.css";
-import { ButtonAction } from "../../shared/UI/components/ButtonAction/ButtonAction";
+
+import { styled } from "@mui/material/styles";
+import MuiAppBar, {
+  type AppBarProps as MuiAppBarProps,
+} from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
+const drawerWidth = 250;
+
+interface AppBarProps extends MuiAppBarProps {
+  open?: boolean;
+}
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<AppBarProps>(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  backgroundColor: theme.palette.background.paper,
+  color: theme.palette.text.primary,
+  transition: theme.transitions.create(["margin", "width"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: `${drawerWidth}px`,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
 
 type HeaderProps = {
   curPage?: React.ReactNode;
   userInfo?: React.ReactNode;
   isLogin?: boolean;
+  submenu?: React.ReactNode;
+  open?: boolean;
+  handleDrawerOpen: () => void;
 };
 
-export function Header({ curPage, userInfo, isLogin }: HeaderProps) {
+export function Header({
+  curPage,
+  userInfo,
+  isLogin,
+  submenu,
+  open,
+  handleDrawerOpen,
+}: HeaderProps) {
   return (
-    <header className={classes.header}>
-      <div className={classes.pageTitle}>{curPage}</div>
-      {isLogin ? (
-        <NavLink to="/profile" className={classes.link}>
-          <div className={classes.userPic}>{userInfo}</div>
-        </NavLink>
-      ) : (
-        <div className={classes.login}>
-          <NavLink to="/login" className={classes.link}>
-            <ButtonAction>Login</ButtonAction>
+    <AppBar position="fixed" open={open}>
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          sx={{ marginRight: 2, ...(open && { display: "none" }) }}
+        >
+          <ChevronRightIcon />
+        </IconButton>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          {submenu || curPage}
+        </Typography>
+        {isLogin ? (
+          <NavLink
+            to="/profile"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            {userInfo}
           </NavLink>
-        </div>
-      )}
-    </header>
+        ) : (
+          <Button color="inherit" component={NavLink} to="/login">
+            Login
+          </Button>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 }
