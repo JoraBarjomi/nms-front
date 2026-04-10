@@ -124,12 +124,6 @@ const Table = <TData extends { id: GridRowId }>({
     });
   }, []);
 
-  const handleCloseDrawer = () => {
-    setDetailOpen(false);
-    setDetailsError(null);
-    setAdditionalData(null);
-  };
-
   return (
     <Box>
       <Box

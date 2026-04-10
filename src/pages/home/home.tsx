@@ -57,7 +57,7 @@ export function HomePage() {
     severity: "success",
   });
   const [syncingId, setSyncingId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
 
   useEffect(() => {
     fetchNetworkElements()
