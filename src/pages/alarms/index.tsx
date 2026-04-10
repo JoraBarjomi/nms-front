@@ -8,9 +8,7 @@ import {
   MaintIcon,
   PlotIcon,
 } from "../../shared/UI/icons/icons";
-import Table from "../../widgets/Table/Table";
 import classes from "./alarms.module.css";
-import { alarmTableColumns } from "../../features/alarmTable/columnsAlarms";
 import { AlarmsData } from "../../entities/Alarms";
 import { countBy } from "../../shared/utils/countBy";
 import { ALL_STATUSES } from "../../shared/constants/allStatuses";
@@ -73,20 +71,7 @@ export function AlarmsPage() {
           ></CardStatus>
         </div>
       </div>
-      <div className={classes.table}>
-        <Table
-          columnsTable={alarmTableColumns}
-          dataTable={AlarmsData}
-          renderDetails={(row) => (
-            <div className={classes.info}>
-              <h3>Device: {row.device}</h3>
-              <p>Status: {row.status}</p>
-              <p>Probable cause: {row.probable_cause}</p>
-              <p>Specific problem: {row.spec_problem}</p>
-            </div>
-          )}
-        ></Table>
-      </div>
+      <div className={classes.table}></div>
     </div>
   );
 }

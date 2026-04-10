@@ -49,6 +49,9 @@ const theme = createTheme({
       primary: "#fff",
       secondary: "#cccccc",
     },
+    action: {
+      active: "#fff",
+    },
   },
   typography: {
     fontFamily: '"Poppins", sans-serif',
@@ -59,6 +62,37 @@ const theme = createTheme({
         root: {
           textTransform: "none",
           borderRadius: "8px",
+        },
+        outlined: {
+          borderColor: "rgba(255, 255, 255, 0.23)",
+          color: "#fff",
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          width: "100%",
+          borderRadius: "8px",
+          background: "transparent",
+          color: "#fff",
+          transition: "border-color 0.2s ease",
+
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "rgba(255, 255, 255, 0.5)",
+          },
+
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#5a7fd1",
+          },
+
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#4267b1",
+          },
+
+          "& .MuiOutlinedInput-input": {
+            padding: "14px 14px",
+          },
         },
       },
     },

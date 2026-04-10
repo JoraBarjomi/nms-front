@@ -11,43 +11,43 @@ export function Status({ status }: StatusProps) {
       {status === "down" ? (
         <div className={classes.content}>
           <div className={classes.down}></div>
-          <h1 className={classes.h1}>Down</h1>
+          <span className={classes.text}>Down</span>
         </div>
       ) : status === "maint" ? (
         <div className={classes.content}>
           <div className={classes.maint}></div>
-          <h1 className={classes.h1}>Maint</h1>
+          <span className={classes.text}>Maint</span>
         </div>
       ) : status === "deg" ? (
         <div className={classes.content}>
           <div className={classes.deg}></div>
-          <h1 className={classes.h1}>Degraded</h1>
+          <span className={classes.text}>Degraded</span>
         </div>
       ) : status === "active" ? (
         <div className={classes.content}>
           <div className={classes.activeStatus}></div>
-          <h1 className={classes.h1}>Active</h1>
+          <span className={classes.text}>Active</span>
         </div>
       ) : status === "critical" ? (
         <div className={classes.content}>
           <div className={classes.critical}></div>
-          <h1 className={classes.h1}>Critical</h1>
+          <span className={classes.text}>Critical</span>
         </div>
       ) : status === "major" ? (
         <div className={classes.content}>
           <div className={classes.major}></div>
-          <h1 className={classes.h1}>Major</h1>
+          <span className={classes.text}>Major</span>
         </div>
       ) : status === "warning" ? (
         <div className={classes.content}>
           <div className={classes.warning}></div>
-          <h1 className={classes.h1}>Warning</h1>
+          <span className={classes.text}>Warning</span>
         </div>
       ) : status === "closed" ? (
         <div className={classes.content}>
           <div className={classes.closed}></div>
 
-          <h1 className={classes.h1}>Closed</h1>
+          <span className={classes.text}>Closed</span>
         </div>
       ) : null}
     </>

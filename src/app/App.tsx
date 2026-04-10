@@ -8,7 +8,7 @@ import { SideMenu } from "../widgets/SideMenu/SideMenu";
 import { Header } from "../widgets/Header/Header";
 import { Submenu } from "../shared/UI/components/Submenu/Submenu";
 
-import { HomePage } from "../pages/home/index";
+import { HomePage } from "../pages/home/home";
 import { DashboardPage } from "../pages/dashboard/index";
 import { AlarmsPage } from "../pages/alarms/index";
 import { DevicesPage } from "../pages/devices/index";
@@ -106,7 +106,12 @@ const App: React.FC = () => {
       <SideMenu open={open} handleDrawerClose={handleDrawerClose} />
       <Box
         component="main"
-        sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
+        sx={{
+          flexGrow: 1,
+          minWidth: 0,
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         <Header
           open={open}

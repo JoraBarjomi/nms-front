@@ -20,11 +20,12 @@
   --color-focus: rgba(66, 103, 177, 0.6);
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .link {
@@ -36,4 +37,4 @@ html, body {
 .link:active,
 .link:visited {
   text-decoration: none;
-} 
+}

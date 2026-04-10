@@ -15,9 +15,7 @@ import {
   DownlinkIcon,
 } from "../../shared/UI/icons/icons";
 import classes from "./devices.module.css";
-import Table from "../../widgets/Table/Table";
 import { DevicesData } from "../../entities/Device";
-import { deviceTableColumns } from "../../features/deviceTable/deviceColumns";
 import { countBy } from "../../shared/utils/countBy";
 import { ALL_STATUSES } from "../../shared/constants/allStatuses";
 import { ALL_DEVICES } from "../../shared/constants/allDevices";
@@ -103,22 +101,7 @@ export function DevicesPage() {
           ></BigCard>
         </div>
       </div>
-      <div className={classes.table}>
-        <Table
-          columnsTable={deviceTableColumns}
-          dataTable={DevicesData}
-          renderDetails={(row) => (
-            <div className={classes.info}>
-              <h3>Device: {row.device}</h3>
-              <p>Type: {row.type}</p>
-              <p>Uptime: {row.uptime}</p>
-              <p>Load: {row.load}</p>
-              <p>Status: {row.status}</p>
-              <p>Ip: {row.ip}</p>
-            </div>
-          )}
-        ></Table>
-      </div>
+      <div className={classes.table}></div>
     </div>
   );
 }

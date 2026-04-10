@@ -1,47 +1,63 @@
-import { createColumnHelper } from "@tanstack/react-table";
+import { type GridColDef, type GridRenderCellParams } from "@mui/x-data-grid";
 import { Status } from "../../shared/UI/components/Status/Status";
-import type { Device } from "../../entities/Device";
 import type { AllStatuses } from "../../shared/constants/allStatuses";
-import { Checkbox } from "../../shared/UI/components/Checkbox/Checkbox";
+import type { Device } from "../../entities/Device";
 
-const columnHelper = createColumnHelper<Device>();
-export const deviceTableColumns = [
-  columnHelper.display({
-    id: "selected",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllRowsSelected()}
-        onChange={table.getToggleAllPageRowsSelectedHandler()}
-      />
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { IconButton } from "@mui/material";
+
+export const deviceTableColumns = (
+  onOpenDetails: (id: string) => void,
+): GridColDef<Device>[] => [
+  {
+    field: "device",
+    headerName: "Device name",
+    flex: 1,
+  },
+  {
+    field: "type",
+    headerName: "Type",
+    flex: 1,
+  },
+  {
+    field: "uptime",
+    headerName: "Uptime",
+    flex: 1,
+  },
+  {
+    field: "load",
+    headerName: "Load",
+    flex: 1,
+    valueFormatter: (params: { value: number }) => `${params.value}%`,
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    flex: 1,
+    renderCell: (params: GridRenderCellParams<Device, AllStatuses>) => (
+      <Status status={params.value} />
     ),
-    cell: ({ row }) => {
-      return (
-        <Checkbox
-          checked={row.getIsSelected()}
-          disabled={!row.getCanSelect()}
-          onChange={row.getToggleSelectedHandler()}
-        />
-      );
-    },
-  }),
-  columnHelper.accessor("device", {
-    header: () => "Device name",
-    cell: (info) => info.renderValue(),
-  }),
-  columnHelper.accessor("type", {
-    header: () => "Type",
-    cell: (info) => info.renderValue(),
-  }),
-  columnHelper.accessor("uptime", {
-    header: () => "Uptime",
-    cell: (info) => info.renderValue(),
-  }),
-  columnHelper.accessor("load", {
-    header: () => "Load",
-    cell: (info) => `${info.renderValue()}%`,
-  }),
-  columnHelper.accessor("status", {
-    header: () => "Status",
-    cell: (info) => <Status status={info.getValue() as AllStatuses} />,
-  }),
+  },
+  {
+    field: "details",
+    headerName: "",
+    minWidth: 80,
+    maxWidth: 100,
+    resizable: false,
+    sortable: false,
+    filterable: false,
+    disableColumnMenu: true,
+    align: "center",
+    renderCell: (params: GridRenderCellParams<Device>) => (
+      <IconButton
+        size="small"
+        onClick={(e) => {
+          e.stopPropagation();
+          onOpenDetails(params.row.device);
+        }}
+      >
+        <MoreVertIcon fontSize="small" />
+      </IconButton>
+    ),
+  },
 ];
