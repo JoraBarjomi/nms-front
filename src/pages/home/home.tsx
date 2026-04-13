@@ -116,14 +116,17 @@ export function HomePage() {
       await syncNetworkElements(id);
       setSnackbar({
         open: true,
-        message: "Sync start!",
+        message: "Sync completed!",
         severity: "success",
       });
     } catch (error) {
       console.error("Sync failed: ", error);
+      const msg = (error as Error).message;
       setSnackbar({
         open: true,
-        message: "Failed to start sync!",
+        message: msg.includes("404")
+          ? "Device not found or sync not available"
+          : "Failed to sync",
         severity: "error",
       });
     } finally {

@@ -32,7 +32,7 @@ export const deleteNetworkElements = async (id: string): Promise<void> => {
   }
 };
 
-export const syncNetworkElements = async (id: string): Promise<void> => {
+export const syncNetworkElements = async (id: string): Promise<any> => {
   const response = await fetch(`/api/v1/ne/${id}/inventory/sync`, {
     method: "POST",
   });

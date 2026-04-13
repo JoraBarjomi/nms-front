@@ -57,17 +57,17 @@ export function Status({ status }: StatusProps) {
       ) : status === "connecting" ? (
         <div className={classes.content}>
           <div className={classes.warning}></div>
-          <span className={classes.text}>Connected</span>
+          <span className={classes.text}>Connecting</span>
         </div>
       ) : status === "reconnecting" ? (
         <div className={classes.content}>
           <div className={classes.major}></div>
-          <span className={classes.text}>Connected</span>
+          <span className={classes.text}>Reconnecting</span>
         </div>
       ) : status === "disconnected" ? (
         <div className={classes.content}>
           <div className={classes.down}></div>
-          <span className={classes.text}>Connected</span>
+          <span className={classes.text}>Disconnected</span>
         </div>
       ) : null}
     </>
