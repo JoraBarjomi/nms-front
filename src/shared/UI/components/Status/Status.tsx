@@ -49,6 +49,26 @@ export function Status({ status }: StatusProps) {
 
           <span className={classes.text}>Closed</span>
         </div>
+      ) : status === "connected" ? (
+        <div className={classes.content}>
+          <div className={classes.activeStatus}></div>
+          <span className={classes.text}>Connected</span>
+        </div>
+      ) : status === "connecting" ? (
+        <div className={classes.content}>
+          <div className={classes.warning}></div>
+          <span className={classes.text}>Connected</span>
+        </div>
+      ) : status === "reconnecting" ? (
+        <div className={classes.content}>
+          <div className={classes.major}></div>
+          <span className={classes.text}>Connected</span>
+        </div>
+      ) : status === "disconnected" ? (
+        <div className={classes.content}>
+          <div className={classes.down}></div>
+          <span className={classes.text}>Connected</span>
+        </div>
       ) : null}
     </>
   );
