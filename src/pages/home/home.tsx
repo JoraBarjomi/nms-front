@@ -124,9 +124,11 @@ export function HomePage() {
       const msg = (error as Error).message;
       setSnackbar({
         open: true,
-        message: msg.includes("404")
-          ? "Device not found or sync not available"
-          : "Failed to sync",
+        message: msg.includes("no active connection")
+          ? "Device is not connected"
+          : msg.includes("not found")
+            ? "Device not found"
+            : "Failed to sync",
         severity: "error",
       });
     } finally {

@@ -29,7 +29,7 @@ export const getElementsTableColumns = (): GridColDef<NetworkElement>[] => [
   {
     field: "address",
     headerName: "Ip address",
-    flex: 1,
+    flex: 0.6,
     minWidth: 140,
   },
   {
@@ -41,8 +41,8 @@ export const getElementsTableColumns = (): GridColDef<NetworkElement>[] => [
   {
     field: "status",
     headerName: "Status",
-    flex: 0.7,
-    minWidth: 80,
+    flex: 1,
+    minWidth: 120,
     renderCell: (params: GridRenderCellParams) => (
       <Status status={params.value as AllStatuses} />
     ),
