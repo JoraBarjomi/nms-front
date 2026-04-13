@@ -29,15 +29,17 @@ type TableProps<TData extends { id: GridRowId }> = {
 };
 
 const Table = <TData extends { id: GridRowId }>({
-  rows,
-  columns,
+  rows = [],
+  columns = [],
   title = "Table",
   renderDetails,
   fetchDetails,
 }: TableProps<TData>) => {
   const [search, setSearch] = useState("");
+  const safeRows = rows ?? [];
+  const safeColumns = columns ?? [];
   const [selectedRowId, setSelectedRowId] = useState<GridRowId | null>(
-    rows[0]?.id ?? null,
+    safeRows?.[0]?.id ?? null,
   );
   const [detailOpen, setDetailOpen] = useState(false);
   const [rowSelectionModel, setRowSelectionModel] =
@@ -51,35 +53,41 @@ const Table = <TData extends { id: GridRowId }>({
   const [additionalData, setAdditionalData] = useState<any>(null);
 
   useEffect(() => {
-    if (
-      selectedRowId !== null &&
-      !rows.some((row) => row.id === selectedRowId)
-    ) {
-      setSelectedRowId(rows[0]?.id ?? null);
+    if (!safeRows || safeRows.length === 0) {
+      setSelectedRowId(null);
       return;
     }
 
-    if (selectedRowId === null && rows[0]) {
-      setSelectedRowId(rows[0].id);
+    if (
+      selectedRowId !== null &&
+      !safeRows.some((row) => row?.id === selectedRowId)
+    ) {
+      setSelectedRowId(safeRows[0]?.id ?? null);
+      return;
     }
-  }, [rows, selectedRowId]);
+
+    if (selectedRowId === null && safeRows[0]) {
+      setSelectedRowId(safeRows[0].id);
+    }
+  }, [safeRows, selectedRowId]);
 
   const filteredRows = useMemo(() => {
+    if (!safeRows || safeRows.length === 0) return [];
     const query = search.trim().toLowerCase();
-    if (!query) return rows;
+    if (!query) return safeRows;
 
-    return rows.filter((row) => {
+    return safeRows.filter((row) => {
       try {
-        return JSON.stringify(row).toLowerCase().includes(query);
+        return row && JSON.stringify(row).toLowerCase().includes(query);
       } catch {
         return false;
       }
     });
-  }, [rows, search]);
+  }, [safeRows, search]);
 
   const selectedRow = useMemo(
-    () => rows.find((row) => row.id === selectedRowId) ?? null,
-    [rows, selectedRowId],
+    () => safeRows?.find((row) => row?.id === selectedRowId) ?? null,
+    [safeRows, selectedRowId],
   );
 
   const handleOpenDetails = useCallback(
@@ -209,8 +217,8 @@ const Table = <TData extends { id: GridRowId }>({
           >
             <DataGrid
               autoHeight
-              rows={filteredRows}
-              columns={columns}
+              rows={filteredRows ?? []}
+              columns={safeColumns ?? []}
               checkboxSelection
               onRowClick={(params) => {
                 handleOpenDetails(params.id);
@@ -324,7 +332,7 @@ const Table = <TData extends { id: GridRowId }>({
           )}
 
           {!detailsLoading && !detailsError && selectedRow && renderDetails && (
-            <>{renderDetails(selectedRow, additionalData)}</>
+            <>{renderDetails(selectedRow, additionalData ?? null)}</>
           )}
 
           {!detailsLoading &&
@@ -335,6 +343,12 @@ const Table = <TData extends { id: GridRowId }>({
                 No details available.
               </Typography>
             )}
+
+          {!detailsLoading && !detailsError && !selectedRow && (
+            <Typography variant="body2" color="text.secondary">
+              No data selected.
+            </Typography>
+          )}
         </Stack>
       </Drawer>
     </Box>
