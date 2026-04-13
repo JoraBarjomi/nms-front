@@ -281,7 +281,7 @@ export function HomePage() {
                     {new Date(additionalData.synced_at).toLocaleString()}
                   </Typography>
                 </Box>
-                <Box display="flex" gap={2} alignItems="center" marginTop={2}>
+                {/* <Box display="flex" gap={2} alignItems="center" marginTop={2}>
                   <Typography color="text.secondary" fontWeight={600}>
                     {additionalData.objects[2].class} earfcnDL:
                   </Typography>
@@ -304,7 +304,7 @@ export function HomePage() {
                   <Typography variant="body2">
                     {additionalData.objects[3].attributes.earfcn}
                   </Typography>
-                </Box>
+                </Box> */}
               </>
             )}
 
