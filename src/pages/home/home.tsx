@@ -277,40 +277,32 @@ export function HomePage() {
               <Status status={row.status as AllStatuses} />
             </Box>
             {additionalData && !additionalData.notSynced && (
-              <>
-                <Box display="flex" gap={2} alignItems="center" marginTop={2}>
-                  <Typography color="text.secondary" fontWeight={600}>
-                    Data from synced json:
-                  </Typography>
-                  <Typography variant="body2">
+              <Box mt={3}>
+                <Typography color="text.secondary" fontWeight={600} mb={1}>
+                  Raw Inventory Data:
+                </Typography>
+                <Paper
+                  variant="outlined"
+                  sx={{
+                    p: 2,
+                    backgroundColor: "grey.50",
+                    overflowX: "auto",
+                    borderRadius: 2,
+                  }}
+                >
+                  <pre
+                    style={{
+                      margin: 0,
+                      fontSize: "0.875rem",
+                      fontFamily: "monospace",
+                      whiteSpace: "pre-wrap",
+                      wordBreak: "break-all",
+                    }}
+                  >
                     {JSON.stringify(additionalData, null, 2)}
-                  </Typography>
-                </Box>
-                {/* <Box display="flex" gap={2} alignItems="center" marginTop={2}>
-                  <Typography color="text.secondary" fontWeight={600}>
-                    {additionalData.objects[2].class} earfcnDL:
-                  </Typography>
-                  <Typography variant="body2">
-                    {additionalData.objects[2].attributes.earfcnDL}
-                  </Typography>
-                </Box>
-                <Box display="flex" gap={2} alignItems="center" marginTop={2}>
-                  <Typography color="text.secondary" fontWeight={600}>
-                    {additionalData.objects[2].class} pci:
-                  </Typography>
-                  <Typography variant="body2">
-                    {additionalData.objects[2].attributes.pci}
-                  </Typography>
-                </Box>
-                <Box display="flex" gap={2} alignItems="center" marginTop={2}>
-                  <Typography color="text.secondary" fontWeight={600}>
-                    {additionalData.objects[3].class} earfcn:
-                  </Typography>
-                  <Typography variant="body2">
-                    {additionalData.objects[3].attributes.earfcn}
-                  </Typography>
-                </Box> */}
-              </>
+                  </pre>
+                </Paper>
+              </Box>
             )}
 
             {additionalData?.notSynced && (

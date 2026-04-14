@@ -21,7 +21,8 @@ export const fetchDetailedNetworkElementById = async (
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
-    throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
+    const message = errorBody.error || `HTTP error! status: ${response.status}`;
+    throw new Error(`${message} (${response.status})`);
   }
 
   return response.json();
@@ -37,7 +38,8 @@ export const deleteNetworkElements = async (id: string): Promise<void> => {
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
-    throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
+    const message = errorBody.error || `HTTP error! status: ${response.status}`;
+    throw new Error(`${message} (${response.status})`);
   }
 };
 
@@ -51,7 +53,8 @@ export const syncNetworkElements = async (id: string): Promise<any> => {
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
-    throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
+    const message = errorBody.error || `HTTP error! status: ${response.status}`;
+    throw new Error(`${message} (${response.status})`);
   }
 
   return response.json();
