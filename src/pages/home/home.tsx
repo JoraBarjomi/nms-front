@@ -285,22 +285,11 @@ export function HomePage() {
                   variant="outlined"
                   sx={{
                     p: 2,
-                    backgroundColor: "grey.50",
                     overflowX: "auto",
                     borderRadius: 2,
                   }}
                 >
-                  <pre
-                    style={{
-                      margin: 0,
-                      fontSize: "0.875rem",
-                      fontFamily: "monospace",
-                      whiteSpace: "pre-wrap",
-                      wordBreak: "break-all",
-                    }}
-                  >
-                    {JSON.stringify(additionalData, null, 2)}
-                  </pre>
+                  <pre>{JSON.stringify(additionalData, null, 2)}</pre>
                 </Paper>
               </Box>
             )}
