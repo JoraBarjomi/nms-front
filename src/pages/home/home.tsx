@@ -280,10 +280,10 @@ export function HomePage() {
               <>
                 <Box display="flex" gap={2} alignItems="center" marginTop={2}>
                   <Typography color="text.secondary" fontWeight={600}>
-                    Synced at:
+                    Data from synced json:
                   </Typography>
                   <Typography variant="body2">
-                    {new Date(additionalData.synced_at).toLocaleString()}
+                    {JSON.stringify(additionalData, null, 2)}
                   </Typography>
                 </Box>
                 {/* <Box display="flex" gap={2} alignItems="center" marginTop={2}>
