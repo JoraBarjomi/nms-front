@@ -19,7 +19,6 @@ import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
 
 import {
-  HomeIcon,
   DashboardIcon,
   AlertIcon,
   DevicesIcon,
