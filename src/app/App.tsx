@@ -20,7 +20,7 @@ import { SettingsPage } from "../pages/settings";
 import { ProfilePage } from "../pages/profile";
 import { RegisterPage } from "../pages/register";
 import { LoginPage } from "../pages/login";
-import { AddPage } from "../pages/add";
+import { AddPage } from "../pages/add/add";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",

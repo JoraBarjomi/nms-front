@@ -1,5 +1,6 @@
-import { useState } from "react";
+import React, { useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { IMaskInput } from "react-imask";
 import {
   Paper,
   Typography,
@@ -11,22 +12,55 @@ import {
   Alert,
   CircularProgress,
   Slide,
+  Chip,
   type SlideProps,
+  Box,
 } from "@mui/material";
 import { createNetworkElement } from "./api/api";
+import Select, { type SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 
 function SlideTransition(props: SlideProps) {
   return <Slide {...props} direction="left" />;
 }
 
+const IPAddressMask = React.forwardRef<HTMLInputElement, any>(
+  function IPAddressMask(props, ref) {
+    const { onChange, ...other } = props;
+    return (
+      <IMaskInput
+        {...other}
+        mask="[000].[000].[000].[000]"
+        blocks={{
+          "000": {
+            mask: /^[0-9]{1,3}$/,
+            from: 0,
+            to: 255,
+            autofix: true,
+          },
+        }}
+        inputRef={ref}
+        onAccept={(value: any) =>
+          onChange({ target: { name: props.name, value } })
+        }
+        overwrite
+      />
+    );
+  },
+);
+
 export function AddPage() {
   const navigate = useNavigate();
+
   const [elementData, setElementData] = useState({
     name: "",
     ipAddress: "",
     vendor: "",
-    capabilities: "",
+    capabilities: [] as string[],
   });
+
   const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
@@ -38,24 +72,34 @@ export function AddPage() {
     severity: "success",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e:
+      | SelectChangeEvent<string | string[]>
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setElementData((prev) => ({
       ...prev,
-      [name]: value,
+      [name as string]: value,
     }));
   };
 
   const handleCreate = async () => {
     setLoading(true);
     try {
-      await createNetworkElement(elementData);
+      const payload = {
+        ...elementData,
+        capabilities: elementData.capabilities.join(", "),
+      };
+
+      await createNetworkElement(payload);
+
       setSnackbar({
         open: true,
         message: "Network element successfully created!",
         severity: "success",
       });
-      setTimeout(() => navigate("/"), 2000);
+      setTimeout(() => navigate("/"), 1500);
     } catch (error) {
       console.error("Error creating element ", error);
       setSnackbar({
@@ -73,7 +117,7 @@ export function AddPage() {
       name: "",
       ipAddress: "",
       vendor: "",
-      capabilities: "",
+      capabilities: [],
     });
   };
 
@@ -83,13 +127,7 @@ export function AddPage() {
 
   return (
     <Container maxWidth="sm" sx={{ py: 4 }}>
-      <Paper
-        elevation={3}
-        sx={{
-          p: 4,
-          borderRadius: 3,
-        }}
-      >
+      <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
         <Typography
           variant="h5"
           component="h2"
@@ -122,31 +160,48 @@ export function AddPage() {
             onChange={handleChange}
             fullWidth
             variant="outlined"
+            InputProps={{
+              inputComponent: IPAddressMask as any,
+            }}
           />
 
-          <TextField
-            autoComplete="off"
-            required
-            label="Vendor"
-            name="vendor"
-            placeholder="vendor-a"
-            value={elementData.vendor}
-            onChange={handleChange}
-            fullWidth
-            variant="outlined"
-          />
+          <FormControl fullWidth>
+            <InputLabel>Vendor</InputLabel>
+            <Select
+              name="vendor"
+              required
+              value={elementData.vendor}
+              label="Vendor"
+              onChange={handleChange}
+            >
+              <MenuItem value={"vendor-a"}>Vendor-A</MenuItem>
+              <MenuItem value={"vendor-b"}>Vendor-B</MenuItem>
+              <MenuItem value={"vendor-c"}>Vendor-C</MenuItem>
+            </Select>
+          </FormControl>
 
-          <TextField
-            autoComplete="off"
-            required
-            label="Capabilities"
-            name="capabilities"
-            placeholder="capabilities"
-            value={elementData.capabilities}
-            onChange={handleChange}
-            fullWidth
-            variant="outlined"
-          />
+          <FormControl fullWidth>
+            <InputLabel>Capabilities</InputLabel>
+            <Select
+              multiple
+              name="capabilities"
+              required
+              value={elementData.capabilities}
+              label="Capabilities"
+              onChange={handleChange}
+              renderValue={(selected) => (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {(selected as string[]).map((value) => (
+                    <Chip key={value} label={value} size="small" />
+                  ))}
+                </Box>
+              )}
+            >
+              <MenuItem value={"a"}>a</MenuItem>
+              <MenuItem value={"b"}>b</MenuItem>
+              <MenuItem value={"c"}>c</MenuItem>
+            </Select>
+          </FormControl>
 
           <Stack
             direction="row"
@@ -180,7 +235,7 @@ export function AddPage() {
         autoHideDuration={4000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        slotProps={{ transition: SlideTransition }}
+        TransitionComponent={SlideTransition}
       >
         <Alert
           onClose={handleCloseSnackbar}
