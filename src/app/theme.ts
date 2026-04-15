@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme, type PaletteMode } from "@mui/material";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -12,91 +12,97 @@ declare module "@mui/material/styles" {
   }
 }
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#4267b1",
-      light: "#5a7fd1",
-      dark: "#2f4f8a",
-      contrastText: "#fff",
-    },
-    secondary: {
-      main: "#cccccc",
-    },
-    error: {
-      main: "#ff4d4d",
-    },
-    warning: {
-      main: "#ffc107",
-    },
-    success: {
-      main: "#4dda64",
-    },
-    info: {
-      main: "#2296f3",
-    },
-    maint: {
-      main: "#2296f3",
-    },
-    major: {
-      main: "#ff9800",
-    },
-    background: {
-      default: "#242424",
-      paper: "#2c2c2c",
-    },
-    text: {
-      primary: "#fff",
-      secondary: "#cccccc",
-    },
-    action: {
-      active: "#fff",
-    },
-  },
-  typography: {
-    fontFamily: '"Poppins", sans-serif',
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: "none",
-          borderRadius: "8px",
-        },
-        outlined: {
-          borderColor: "rgba(255, 255, 255, 0.23)",
-          color: "#fff",
-        },
+export const getAppTheme = (mode: PaletteMode) => {
+  const isDark = mode === "dark";
+
+  return createTheme({
+    palette: {
+      mode,
+      primary: {
+        main: isDark ? "#5B8DEF" : "#4267b1",
+        light: isDark ? "#8FB3FF" : "#5a7fd1",
+        dark: isDark ? "#2F5FCC" : "#2f4f8a",
+        contrastText: isDark ? "rgba(0, 0, 0, 0.87)" : "#fff",
+      },
+      secondary: {
+        main: "#f4d7b1",
+      },
+      error: {
+        main: "#f44336",
+      },
+      warning: {
+        main: "#ffa726",
+      },
+      success: {
+        main: "#66bb6a",
+      },
+      info: {
+        main: "#29b6f6",
+      },
+      maint: {
+        main: "#7986cb",
+      },
+      major: {
+        main: "#ff9800",
+      },
+      background: {
+        default: isDark ? "#0B0E14" : "#E2E8F0",
+        paper: isDark ? "#151921" : "#F8FAFC",
+      },
+      text: {
+        primary: isDark ? "#F8FAFC" : "#0F172A",
+        secondary: isDark ? "#94A3B8" : "#475569",
+      },
+      action: {
+        active: isDark ? "#fff" : "rgba(0, 0, 0, 0.54)",
       },
     },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          width: "100%",
-          borderRadius: "8px",
-          background: "transparent",
-          color: "#fff",
-          transition: "border-color 0.2s ease",
-
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "rgba(255, 255, 255, 0.5)",
+    typography: {
+      fontFamily: '"Poppins", sans-serif',
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: "none",
+            borderRadius: "8px",
           },
-
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#5a7fd1",
-          },
-
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#4267b1",
-          },
-
-          "& .MuiOutlinedInput-input": {
-            padding: "14px 14px",
+          outlined: {
+            borderColor: isDark
+              ? "rgba(255, 255, 255, 0.23)"
+              : "rgba(0, 0, 0, 0.23)",
+            color: isDark ? "#e0e0e0" : "inherit",
           },
         },
       },
-    },
-  },
-});
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            width: "100%",
+            borderRadius: "8px",
+            background: "transparent",
+            transition: "border-color 0.2s ease",
+            color: isDark ? "#e0e0e0" : "inherit",
+            "&.MuiOutlinedInput-notchedOutline": {
+              borderColor: isDark
+                ? "rgba(255, 255, 255, 0.3)"
+                : "rgba(0, 0, 0, 0.23)",
+            },
 
-export default theme;
+            "&:hover.MuiOutlinedInput-notchedOutline": {
+              borderColor: "#5a7fd1",
+            },
+
+            "&.Mui-focused.MuiOutlinedInput-notchedOutline": {
+              borderColor: "#4267b1",
+            },
+
+            "&.MuiOutlinedInput-input": {
+              padding: "14px 14px",
+            },
+          },
+        },
+      },
+    },
+  });
+};

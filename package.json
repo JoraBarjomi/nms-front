@@ -16,6 +16,7 @@
     "@mui/material": "^7.3.10",
     "@mui/x-data-grid": "^9.0.1",
     "@tanstack/react-table": "^8.21.3",
+    "@toolpad/core": "^0.16.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-imask": "^7.6.1",

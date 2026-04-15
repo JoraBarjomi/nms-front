@@ -24,12 +24,14 @@ import {
   DevicesIcon,
   LogsIcon,
   ConfigIcon,
-  SettingsIcon,
-  SupportIcon,
+  // SettingsIcon,
+  // SupportIcon,
 } from "../../shared/UI/icons/icons";
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 const drawerWidth = 250;
 
@@ -92,43 +94,53 @@ const mainMenuItems = [
   { text: "Config", icon: <ConfigIcon />, path: "/config" },
 ];
 
-const secondaryMenuItems = [
-  { text: "Support", icon: <SupportIcon />, path: "/support" },
-  { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
-];
-
 type SideMenuProps = {
   open?: boolean;
   handleDrawerClose: () => void;
   handleDrawerOpen: () => void;
+  toggleTheme: () => void;
 };
 
 export function SideMenu({
   open,
   handleDrawerClose,
   handleDrawerOpen,
+  toggleTheme,
 }: SideMenuProps) {
   const theme = useTheme();
 
   return (
     <Drawer variant="permanent" open={open}>
-      <DrawerHeader>
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: "flex",
-            justifyContent: "center",
-            opacity: open ? 1 : 0,
-            transition: "opacity 0.2s",
-          }}
-        >
-          <Logo open={open} />
-        </Box>
+      <DrawerHeader
+        sx={{
+          justifyContent: open ? "space-between" : "center",
+          px: open ? 1 : 0,
+          minHeight: 64,
+        }}
+      >
+        {open && (
+          <>
+            <Box sx={{ width: 20 }} />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                transition: "opacity 0.2s",
+              }}
+            >
+              <Logo open={open} />
+            </Box>
+          </>
+        )}
         <IconButton
           onClick={open ? handleDrawerClose : handleDrawerOpen}
           sx={{
-            color: "white",
+            color: "inherit",
             transition: "transform 0.2s",
+            width: 40,
+            height: 40,
+            p: 0,
           }}
         >
           {open ? (
@@ -184,40 +196,32 @@ export function SideMenu({
       <Box sx={{ flexGrow: 1 }} />
       <Divider />
       <List>
-        {secondaryMenuItems.map((item) => (
-          <ListItem key={item.text} disablePadding sx={{ display: "block" }}>
-            <NavLink
-              to={item.path}
-              style={{ textDecoration: "none", color: "inherit" }}
+        <ListItem disablePadding sx={{ display: "block" }}>
+          <ListItemButton
+            onClick={toggleTheme}
+            sx={{
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : 0,
+                justifyContent: "center",
+                color: "inherit",
+              }}
             >
-              {({ isActive }) => (
-                <ListItemButton
-                  selected={isActive}
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 0,
-                      justifyContent: "center",
-                      color: "inherit",
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.text}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
+              {theme.palette.mode === "dark" ? (
+                <DarkModeIcon />
+              ) : (
+                <LightModeIcon />
               )}
-            </NavLink>
-          </ListItem>
-        ))}
+            </ListItemIcon>
+            <ListItemText primary="Dark Mode" sx={{ opacity: open ? 1 : 0 }} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Drawer>
   );

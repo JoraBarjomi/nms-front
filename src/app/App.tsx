@@ -1,6 +1,9 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { getAppTheme } from "./theme";
 
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
@@ -10,10 +13,8 @@ import { Header } from "../widgets/Header/Header";
 import { HomePage } from "../pages/home/home";
 import { ElementsPage } from "../pages/elements/elements";
 import { ElementsAddPage } from "../pages/elementsAdd/elementsAdd";
-
 import { RegisterPage } from "../pages/register";
 import { LoginPage } from "../pages/login";
-
 import { DashboardPage } from "../pages/dashboard/index";
 import { AlarmsPage } from "../pages/alarms/index";
 import { LogsPage } from "../pages/logs/index";
@@ -32,6 +33,11 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 const App: React.FC = () => {
+  const [mode, setMode] = useState<"light" | "dark">("dark");
+  const theme = useMemo(() => getAppTheme(mode), [mode]);
+  const toggleTheme = () => {
+    setMode((prev) => (prev === "light" ? "dark" : "light"));
+  };
   const location = useLocation();
   const [open, setOpen] = useState(true);
 
@@ -90,62 +96,67 @@ const App: React.FC = () => {
 
   const showLayout = layoutPages.includes(location.pathname);
 
-  if (!showLayout) {
-    return (
-      <Routes>
-        <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="/register" element={<RegisterPage />}></Route>
-      </Routes>
-    );
-  }
-
   return (
-    <Box
-      sx={{
-        display: "flex",
-        height: "100vh",
-        backgroundColor: "background.default",
-      }}
-    >
-      <SideMenu
-        open={open}
-        handleDrawerClose={handleDrawerClose}
-        handleDrawerOpen={handleDrawerOpen}
-      />
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          minWidth: 0,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Header
-          open={open}
-          handleDrawerOpen={handleDrawerOpen}
-          curPage={getPageTitle(location.pathname)}
-          userInfo={"G"}
-          isLogin={false}
-        />
-        <DrawerHeader />
-        <Box sx={{ p: 3, flexGrow: 1, color: "text.primary" }}>
-          <Routes>
-            <Route path="/" element={<HomePage />}></Route>
-            <Route path="/elements" element={<ElementsPage />}></Route>
-            <Route path="/elements/add" element={<ElementsAddPage />}></Route>
-            <Route path="/dashboard" element={<DashboardPage />}></Route>
-            <Route path="/alarms" element={<AlarmsPage />}></Route>
-            <Route path="/logs" element={<LogsPage />}></Route>
-            <Route path="/config" element={<ConfigPage />}></Route>
-            <Route path="/support" element={<SupportPage />}></Route>
-            <Route path="/settings" element={<SettingsPage />}></Route>
-            <Route path="/profile" element={<ProfilePage />}></Route>
-            <Route path="*" element={<NotFoundPage />}></Route>
-          </Routes>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {!showLayout ? (
+        <Routes>
+          <Route path="/login" element={<LoginPage />}></Route>
+          <Route path="/register" element={<RegisterPage />}></Route>
+        </Routes>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            height: "100vh",
+            backgroundColor: "background.default",
+          }}
+        >
+          <SideMenu
+            open={open}
+            handleDrawerClose={handleDrawerClose}
+            handleDrawerOpen={handleDrawerOpen}
+            toggleTheme={toggleTheme}
+          />
+
+          <Box
+            component="main"
+            sx={{
+              flexGrow: 1,
+              minWidth: 0,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Header
+              open={open}
+              curPage={getPageTitle(location.pathname)}
+              userInfo={"G"}
+              isLogin={false}
+            />
+            <DrawerHeader />
+            <Box sx={{ p: 3, flexGrow: 1, color: "text.primary" }}>
+              <Routes>
+                <Route path="/" element={<HomePage />}></Route>
+                <Route path="/elements" element={<ElementsPage />}></Route>
+                <Route
+                  path="/elements/add"
+                  element={<ElementsAddPage />}
+                ></Route>
+                <Route path="/dashboard" element={<DashboardPage />}></Route>
+                <Route path="/alarms" element={<AlarmsPage />}></Route>
+                <Route path="/logs" element={<LogsPage />}></Route>
+                <Route path="/config" element={<ConfigPage />}></Route>
+                <Route path="/support" element={<SupportPage />}></Route>
+                <Route path="/settings" element={<SettingsPage />}></Route>
+                <Route path="/profile" element={<ProfilePage />}></Route>
+                <Route path="*" element={<NotFoundPage />}></Route>
+              </Routes>
+            </Box>
+          </Box>
         </Box>
-      </Box>
-    </Box>
+      )}
+    </ThemeProvider>
   );
 };
 

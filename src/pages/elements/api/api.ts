@@ -12,7 +12,7 @@ export const fetchNetworkElements = async (): Promise<NetworkElement[]> => {
 
 export const fetchDetailedNetworkElementById = async (
   id: string,
-): Promise<any> => {
+): Promise<unknown> => {
   const response = await fetch(`/api/v1/ne/${id}/inventory/latest`, {
     headers: {
       "Accept": "application/json",
@@ -20,7 +20,9 @@ export const fetchDetailedNetworkElementById = async (
   });
 
   if (!response.ok) {
-    const errorBody = await response.json().catch(() => ({}));
+    const errorBody = (await response.json().catch(() => ({}))) as {
+      error?: string;
+    };
     const message = errorBody.error || `HTTP error! status: ${response.status}`;
     throw new Error(`${message} (${response.status})`);
   }
@@ -37,13 +39,15 @@ export const deleteNetworkElements = async (id: string): Promise<void> => {
   });
 
   if (!response.ok) {
-    const errorBody = await response.json().catch(() => ({}));
+    const errorBody = (await response.json().catch(() => ({}))) as {
+      error?: string;
+    };
     const message = errorBody.error || `HTTP error! status: ${response.status}`;
     throw new Error(`${message} (${response.status})`);
   }
 };
 
-export const syncNetworkElements = async (id: string): Promise<any> => {
+export const syncNetworkElements = async (id: string): Promise<unknown> => {
   const response = await fetch(`/api/v1/ne/${id}/inventory/sync`, {
     method: "POST",
     headers: {
@@ -52,7 +56,9 @@ export const syncNetworkElements = async (id: string): Promise<any> => {
   });
 
   if (!response.ok) {
-    const errorBody = await response.json().catch(() => ({}));
+    const errorBody = (await response.json().catch(() => ({}))) as {
+      error?: string;
+    };
     const message = errorBody.error || `HTTP error! status: ${response.status}`;
     throw new Error(`${message} (${response.status})`);
   }

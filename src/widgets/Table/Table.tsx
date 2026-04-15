@@ -28,8 +28,8 @@ type TableProps<TData extends { id: GridRowId }> = {
   rows: TData[];
   columns: GridColDef<TData>[];
   title?: string;
-  renderDetails?: (row: TData, additionalData: any) => React.ReactNode;
-  fetchDetails?: (id: GridRowId) => Promise<any>;
+  renderDetails?: (row: TData, additionalData: unknown) => React.ReactNode;
+  fetchDetails?: (id: GridRowId) => Promise<unknown>;
 };
 
 const Table = <TData extends { id: GridRowId }>({
@@ -41,8 +41,10 @@ const Table = <TData extends { id: GridRowId }>({
 }: TableProps<TData>) => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const safeRows = rows ?? [];
-  const safeColumns = columns ?? [];
+  
+  const safeRows = useMemo(() => rows ?? [], [rows]);
+  const safeColumns = useMemo(() => columns ?? [], [columns]);
+
   const [selectedRowId, setSelectedRowId] = useState<GridRowId | null>(
     safeRows?.[0]?.id ?? null,
   );
@@ -55,7 +57,7 @@ const Table = <TData extends { id: GridRowId }>({
 
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [detailsError, setDetailsError] = useState<string | null>(null);
-  const [additionalData, setAdditionalData] = useState<any>(null);
+  const [additionalData, setAdditionalData] = useState<unknown>(null);
 
   useEffect(() => {
     if (!safeRows || safeRows.length === 0) {
@@ -109,8 +111,8 @@ const Table = <TData extends { id: GridRowId }>({
           setAdditionalData(data);
         } catch (error) {
           console.log("Failed to fetch details:", error);
-          const errorMes = (error as any)?.message || error?.toString();
-          if (errorMes?.includes("404") || errorMes.includes("404")) {
+          const errorMes = (error as Error)?.message || String(error);
+          if (errorMes?.includes("404")) {
             setAdditionalData({ notSynced: true });
           } else {
             setDetailsError("Failed to load detailed information.");
@@ -143,7 +145,6 @@ const Table = <TData extends { id: GridRowId }>({
         sx={{
           width: "100%",
           fontFamily: (theme) => theme.typography.fontFamily,
-          fontSize: (theme) => theme.typography.body2.fontSize,
         }}
       >
         <Paper
@@ -151,7 +152,7 @@ const Table = <TData extends { id: GridRowId }>({
           sx={{
             borderRadius: 3,
             overflow: "hidden",
-            borderBottom: "none",
+            borderColor: "divider",
           }}
         >
           <Box
@@ -159,11 +160,12 @@ const Table = <TData extends { id: GridRowId }>({
               px: 2,
               py: 1.5,
               borderBottom: "1px solid",
-              borderColor: (theme) => theme.palette.grey[700],
-
+              borderColor: "divider",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              backgroundColor: (theme) => 
+                theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.02)" : "rgba(0, 0, 0, 0.01)",
             }}
           >
             <Box sx={{ gap: 2, display: "flex" }}>
@@ -171,35 +173,28 @@ const Table = <TData extends { id: GridRowId }>({
                 size="small"
                 variant="outlined"
                 onClick={handleSelectAllVisible}
-                sx={{
-                  height: 40,
-                  minWidth: "auto",
-                  px: 2,
-                }}
+                sx={{ height: 36, px: 2 }}
               >
-                All
+                Select All
               </Button>
 
               <Button
                 size="small"
                 variant="outlined"
                 onClick={handleClearSelection}
-                sx={{
-                  height: 40,
-                  minWidth: "auto",
-                  px: 2,
-                }}
+                sx={{ height: 36, px: 2 }}
               >
                 Clear
               </Button>
 
               <Button
                 size="small"
-                variant="outlined"
+                variant="contained"
                 startIcon={<AddIcon />}
                 onClick={() => navigate("/elements/add")}
+                sx={{ height: 36 }}
               >
-                Add Element
+                Add
               </Button>
             </Box>
 
@@ -207,13 +202,13 @@ const Table = <TData extends { id: GridRowId }>({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               size="small"
-              label="Search"
+              placeholder="Search..."
               variant="outlined"
               slotProps={{
                 input: {
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon fontSize="small" />
+                      <SearchIcon fontSize="small" color="action" />
                     </InputAdornment>
                   ),
                 },
@@ -224,13 +219,11 @@ const Table = <TData extends { id: GridRowId }>({
 
           <Box
             sx={{
-              height: "70vh",
+              height: "70vh", // Таблица будет занимать 70% высоты экрана
               width: "100%",
-              backgroundColor: "transparent",
             }}
           >
             <DataGrid
-              autoHeight
               rows={filteredRows ?? []}
               columns={safeColumns ?? []}
               checkboxSelection
@@ -238,7 +231,6 @@ const Table = <TData extends { id: GridRowId }>({
                 handleOpenDetails(params.id);
               }}
               disableRowSelectionOnClick
-              keepNonExistentRowsSelected
               rowSelectionModel={rowSelectionModel}
               onRowSelectionModelChange={setRowSelectionModel}
               pageSizeOptions={[10, 25, 50]}
@@ -249,77 +241,45 @@ const Table = <TData extends { id: GridRowId }>({
               }}
               sx={{
                 border: 0,
-                fontSize: 17,
-                "& .MuiDataGrid-main": { border: "none", outline: "none" },
-                "& .MuiDataGrid-virtualScroller": {
-                  border: "none",
-                  outline: "none",
-                },
-                "& .MuiDataGrid-root": { border: "none", outline: "none" },
-                "& .MuiDataGrid-virtualScrollerContent": { border: "none" },
-                "& .MuiDataGrid-virtualScrollerRenderZone": { border: "none" },
-                "& .MuiDataGrid-footerContainer": {
-                  border: "none",
-                  borderTop: (theme) =>
-                    `1px solid ${theme.palette.grey[700]} !important`,
-                  borderBottom: "none !important",
-                },
-                "& .MuiDataGrid-pinnedColumns": { border: "none !important" },
-                "& .MuiDataGrid-pinnedColumnsHeaders": {
-                  border: "none !important",
-                },
-                "& .MuiDataGrid-pinnedColumnsBody": {
-                  border: "none !important",
+                fontSize: "0.95rem",
+                "& .MuiDataGrid-main": { border: "none" },
+                "& .MuiDataGrid-columnHeaders": {
+                  borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+                  backgroundColor: (theme) => 
+                    theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.03)" : "rgba(0, 0, 0, 0.02)",
                 },
                 "& .MuiDataGrid-cell": {
-                  borderTop: "none !important",
-                  borderBottom: (theme) =>
-                    `1px solid ${theme.palette.grey[700]} !important`,
-                  borderLeft: "none !important",
-                  borderRight: "none !important",
-                  outline: "none",
-                  boxShadow: "none",
-                },
-                "& .MuiDataGrid-columnHeaders": {
-                  border: "none !important",
-                  borderBottom: (theme) =>
-                    `1px solid ${theme.palette.grey[700]} !important`,
+                  borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+                  outline: "none !important",
                 },
                 "& .MuiDataGrid-row": {
-                  border: "none !important",
+                  cursor: "pointer",
+                  transition: "background-color 0.2s",
                   "&:hover": {
                     backgroundColor: (theme) => theme.palette.action.hover,
                   },
-
                   "&.Mui-selected": {
-                    backgroundColor: "transparent !important",
+                    backgroundColor: (theme) => 
+                      theme.palette.mode === "dark" 
+                        ? "rgba(66, 103, 177, 0.15) !important" 
+                        : "rgba(66, 103, 177, 0.08) !important",
                     "&:hover": {
-                      backgroundColor: (theme) => theme.palette.action.hover,
+                      backgroundColor: (theme) => 
+                        theme.palette.mode === "dark" 
+                          ? "rgba(66, 103, 177, 0.25) !important" 
+                          : "rgba(66, 103, 177, 0.12) !important",
                     },
                   },
                 },
-
-                "& .MuiDataGrid-cell:focus": {
-                  outline: "none !important",
+                "& .MuiDataGrid-footerContainer": {
+                  borderTop: (theme) => `1px solid ${theme.palette.divider}`,
                 },
-                "& .MuiDataGrid-cell:focus-within": {
-                  outline: "none !important",
+                "& .MuiDataGrid-columnHeaderTitle": {
+                  fontWeight: 600,
+                  color: "text.secondary",
                 },
-
-                "& .MuiDataGrid-columnHeader:focus": {
-                  outline: "none !important",
-                },
-                "& .MuiDataGrid-columnHeader:focus-within": {
-                  outline: "none !important",
-                },
-
                 "& .MuiDataGrid-columnSeparator": {
                   display: "none",
-                },
-
-                "& .MuiDataGrid-withBorderColor": {
-                  borderColor: (theme) =>
-                    `${theme.palette.grey[700]} !important`,
                 },
               }}
             />
@@ -335,20 +295,16 @@ const Table = <TData extends { id: GridRowId }>({
           sx: {
             width: { xs: "100%", sm: 420, md: 520 },
             p: 0,
+            boxShadow: (theme) => theme.palette.mode === "dark" ? "-4px 0 20px rgba(0,0,0,0.5)" : "-4px 0 20px rgba(0,0,0,0.05)",
           },
         }}
       >
-        <Stack spacing={0}>
+        <Stack spacing={0} sx={{ height: "100%" }}>
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between"
-            sx={{
-              p: 2,
-              pb: 2,
-              pr: 2,
-              pl: 2.5,
-            }}
+            sx={{ p: 2, pl: 2.5 }}
           >
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
               {title}
@@ -360,36 +316,23 @@ const Table = <TData extends { id: GridRowId }>({
 
           <Divider />
 
-          {detailsLoading && (
-            <Box display="flex" justifyContent="center" py={4}>
-              <CircularProgress />
-            </Box>
-          )}
-
-          {detailsError && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {detailsError}
-            </Alert>
-          )}
-
-          {!detailsLoading && !detailsError && selectedRow && renderDetails && (
-            <>{renderDetails(selectedRow, additionalData ?? null)}</>
-          )}
-
-          {!detailsLoading &&
-            !detailsError &&
-            !renderDetails &&
-            selectedRow && (
-              <Typography variant="body2" color="text.secondary">
-                No details available.
-              </Typography>
+          <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
+            {detailsLoading && (
+              <Box display="flex" justifyContent="center" py={8}>
+                <CircularProgress size={32} />
+              </Box>
             )}
 
-          {!detailsLoading && !detailsError && !selectedRow && (
-            <Typography variant="body2" color="text.secondary">
-              No data selected.
-            </Typography>
-          )}
+            {detailsError && (
+              <Box p={3}>
+                <Alert severity="error">{detailsError}</Alert>
+              </Box>
+            )}
+
+            {!detailsLoading && !detailsError && selectedRow && renderDetails && (
+              <>{renderDetails(selectedRow, additionalData ?? null)}</>
+            )}
+          </Box>
         </Stack>
       </Drawer>
     </Box>

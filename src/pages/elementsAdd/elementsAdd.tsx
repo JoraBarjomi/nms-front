@@ -26,7 +26,12 @@ function SlideTransition(props: SlideProps) {
   return <Slide {...props} direction="left" />;
 }
 
-const IPAddressMask = React.forwardRef<HTMLInputElement, any>(
+interface CustomProps {
+  onChange: (event: { target: { name: string; value: string } }) => void;
+  name: string;
+}
+
+const IPAddressMask = React.forwardRef<HTMLInputElement, CustomProps>(
   function IPAddressMask(props, ref) {
     const { onChange, ...other } = props;
     return (
@@ -42,7 +47,7 @@ const IPAddressMask = React.forwardRef<HTMLInputElement, any>(
           },
         }}
         inputRef={ref}
-        onAccept={(value: any) =>
+        onAccept={(value: string) =>
           onChange({ target: { name: props.name, value } })
         }
         overwrite

@@ -27,12 +27,12 @@ import {
   Alert,
   Slide,
   type SlideProps,
+  useTheme,
 } from "@mui/material";
 
 import { type GridRowId } from "@mui/x-data-grid";
 import SyncIcon from "@mui/icons-material/Sync";
 import { Delete as DeleteIcon } from "@mui/icons-material";
-import theme from "../../app/theme";
 
 function SlideTransition(props: SlideProps) {
   return <Slide {...props} direction="left" />;
@@ -43,6 +43,7 @@ const fetchElementDetails = async (id: GridRowId) => {
 };
 
 export function ElementsPage() {
+  const theme = useTheme();
   const [elements, setElements] = useState<NetworkElement[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [elementToDelete, setElementToDelete] = useState<NetworkElement | null>(
