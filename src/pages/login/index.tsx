@@ -197,7 +197,7 @@ export function LoginPage() {
           }}
         >
           <SignInPage
-            signIn={(provider, formData) =>
+            signIn={(_provider, formData) =>
               alert(`Logging in with: ${formData.get("email")}`)
             }
             slots={{

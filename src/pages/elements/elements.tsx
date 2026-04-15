@@ -278,7 +278,7 @@ export function ElementsPage() {
               </Typography>{" "}
               <Status status={row.status as AllStatuses} />
             </Box>
-            {additionalData && !additionalData.notSynced && (
+            {additionalData && !(additionalData as any)?.notSynced && (
               <Box mt={3}>
                 <Typography color="text.secondary" fontWeight={600} mb={1}>
                   Raw Inventory Data:
@@ -296,7 +296,7 @@ export function ElementsPage() {
               </Box>
             )}
 
-            {additionalData?.notSynced && (
+            {(additionalData as any)?.notSynced && (
               <Box mt={3}>
                 <Alert
                   variant="outlined"

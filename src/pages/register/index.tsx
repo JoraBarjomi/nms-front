@@ -171,7 +171,7 @@ export function RegisterPage() {
           }}
         >
           <SignInPage
-            signIn={(provider, formData) => {
+            signIn={(_provider, formData) => {
               alert(`Logging in with: ${formData.get("email")}`);
               navigate("/dashboard");
             }}
