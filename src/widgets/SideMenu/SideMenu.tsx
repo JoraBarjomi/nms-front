@@ -85,10 +85,10 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const mainMenuItems = [
-  { text: "Home", icon: <HomeIcon />, path: "/" },
-  { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
+  // { text: "Home", icon: <HomeIcon />, path: "/" },
+  { text: "Elements", icon: <DevicesIcon />, path: "/elements" },
   { text: "Alarms", icon: <AlertIcon />, path: "/alarms" },
-  { text: "Devices", icon: <DevicesIcon />, path: "/devices" },
+  { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
   { text: "Logs", icon: <LogsIcon />, path: "/logs" },
   { text: "Config", icon: <ConfigIcon />, path: "/config" },
 ];
@@ -101,9 +101,14 @@ const secondaryMenuItems = [
 type SideMenuProps = {
   open?: boolean;
   handleDrawerClose: () => void;
+  handleDrawerOpen: () => void;
 };
 
-export function SideMenu({ open, handleDrawerClose }: SideMenuProps) {
+export function SideMenu({
+  open,
+  handleDrawerClose,
+  handleDrawerOpen,
+}: SideMenuProps) {
   const theme = useTheme();
 
   return (
@@ -121,17 +126,22 @@ export function SideMenu({ open, handleDrawerClose }: SideMenuProps) {
           <Logo open={open} />
         </Box>
         <IconButton
-          onClick={handleDrawerClose}
+          onClick={open ? handleDrawerClose : handleDrawerOpen}
           sx={{
-            opacity: open ? 1 : 0,
-            transition: "opacity 0.2s",
             color: "white",
+            transition: "transform 0.2s",
           }}
         >
-          {theme.direction === "rtl" ? (
-            <ChevronRightIcon />
-          ) : (
+          {open ? (
+            theme.direction === "rtl" ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )
+          ) : theme.direction === "rtl" ? (
             <ChevronLeftIcon />
+          ) : (
+            <ChevronRightIcon />
           )}
         </IconButton>
       </DrawerHeader>

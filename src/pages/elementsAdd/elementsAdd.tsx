@@ -53,7 +53,7 @@ const IPAddressMask = React.forwardRef<HTMLInputElement, any>(
   },
 );
 
-export function AddPage() {
+export function ElementsAddPage() {
   const navigate = useNavigate();
 
   const [elementData, setElementData] = useState({
@@ -101,7 +101,7 @@ export function AddPage() {
         message: "Network element successfully created!",
         severity: "success",
       });
-      setTimeout(() => navigate("/"), 1500);
+      setTimeout(() => navigate("/elements"), 1500);
     } catch (error) {
       console.error("Error creating element ", error);
       setSnackbar({

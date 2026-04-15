@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
   type GridColDef,
@@ -17,8 +18,11 @@ import {
   InputAdornment,
   CircularProgress,
   Alert,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
+import AddIcon from "@mui/icons-material/Add";
 
 type TableProps<TData extends { id: GridRowId }> = {
   rows: TData[];
@@ -35,6 +39,7 @@ const Table = <TData extends { id: GridRowId }>({
   renderDetails,
   fetchDetails,
 }: TableProps<TData>) => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const safeRows = rows ?? [];
   const safeColumns = columns ?? [];
@@ -187,6 +192,15 @@ const Table = <TData extends { id: GridRowId }>({
               >
                 Clear
               </Button>
+
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<AddIcon />}
+                onClick={() => navigate("/elements/add")}
+              >
+                Add Element
+              </Button>
             </Box>
 
             <TextField
@@ -276,9 +290,27 @@ const Table = <TData extends { id: GridRowId }>({
                   "&:hover": {
                     backgroundColor: (theme) => theme.palette.action.hover,
                   },
+
                   "&.Mui-selected": {
-                    backgroundColor: (theme) => theme.palette.action.selected,
+                    backgroundColor: "transparent !important",
+                    "&:hover": {
+                      backgroundColor: (theme) => theme.palette.action.hover,
+                    },
                   },
+                },
+
+                "& .MuiDataGrid-cell:focus": {
+                  outline: "none !important",
+                },
+                "& .MuiDataGrid-cell:focus-within": {
+                  outline: "none !important",
+                },
+
+                "& .MuiDataGrid-columnHeader:focus": {
+                  outline: "none !important",
+                },
+                "& .MuiDataGrid-columnHeader:focus-within": {
+                  outline: "none !important",
                 },
 
                 "& .MuiDataGrid-columnSeparator": {
@@ -302,19 +334,28 @@ const Table = <TData extends { id: GridRowId }>({
         PaperProps={{
           sx: {
             width: { xs: "100%", sm: 420, md: 520 },
-            p: 2,
+            p: 0,
           },
         }}
       >
-        <Stack spacing={2}>
+        <Stack spacing={0}>
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between"
+            sx={{
+              p: 2,
+              pb: 2,
+              pr: 2,
+              pl: 2.5,
+            }}
           >
-            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
               {title}
             </Typography>
+            <IconButton onClick={() => setDetailOpen(false)}>
+              <CloseIcon />
+            </IconButton>
           </Stack>
 
           <Divider />

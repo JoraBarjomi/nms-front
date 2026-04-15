@@ -20,9 +20,9 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
   backgroundColor: theme.palette.background.paper,
   color: theme.palette.text.primary,
+  boxShadow: "none",
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -41,7 +41,6 @@ type HeaderProps = {
   curPage?: React.ReactNode;
   userInfo?: React.ReactNode;
   isLogin?: boolean;
-  submenu?: React.ReactNode;
   open?: boolean;
   handleDrawerOpen: () => void;
 };
@@ -50,7 +49,6 @@ export function Header({
   curPage,
   userInfo,
   isLogin,
-  submenu,
   open,
   handleDrawerOpen,
 }: HeaderProps) {
@@ -67,7 +65,7 @@ export function Header({
           <ChevronRightIcon />
         </IconButton>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          {submenu || curPage}
+          {curPage}
         </Typography>
         {isLogin ? (
           <NavLink
@@ -77,7 +75,7 @@ export function Header({
             {userInfo}
           </NavLink>
         ) : (
-          <Button color="inherit" component={NavLink} to="/login">
+          <Button variant="contained" component={NavLink} to="/login">
             Login
           </Button>
         )}
