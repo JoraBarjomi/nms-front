@@ -46,6 +46,8 @@ const IPAddressMask = React.forwardRef<HTMLInputElement, any>(
           onChange({ target: { name: props.name, value } })
         }
         overwrite
+        lazy={false}
+        placeholderChar="_"
       />
     );
   },
