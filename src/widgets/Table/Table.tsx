@@ -28,23 +28,20 @@ type TableProps<TData extends { id: GridRowId }> = {
   rows: TData[];
   columns: GridColDef<TData>[];
   title?: string;
-  renderDetails?: (row: TData, additionalData: unknown) => React.ReactNode;
-  fetchDetails?: (id: GridRowId) => Promise<unknown>;
+  renderDetails?: (row: TData, additionalData: any) => React.ReactNode;
+  fetchDetails?: (id: GridRowId) => Promise<any>;
 };
 
 const Table = <TData extends { id: GridRowId }>({
   rows = [],
   columns = [],
-  title = "Table",
   renderDetails,
   fetchDetails,
 }: TableProps<TData>) => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  
-  const safeRows = useMemo(() => rows ?? [], [rows]);
-  const safeColumns = useMemo(() => columns ?? [], [columns]);
-
+  const safeRows = rows ?? [];
+  const safeColumns = columns ?? [];
   const [selectedRowId, setSelectedRowId] = useState<GridRowId | null>(
     safeRows?.[0]?.id ?? null,
   );
@@ -57,7 +54,7 @@ const Table = <TData extends { id: GridRowId }>({
 
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [detailsError, setDetailsError] = useState<string | null>(null);
-  const [additionalData, setAdditionalData] = useState<unknown>(null);
+  const [additionalData, setAdditionalData] = useState<any>(null);
 
   useEffect(() => {
     if (!safeRows || safeRows.length === 0) {
@@ -111,8 +108,8 @@ const Table = <TData extends { id: GridRowId }>({
           setAdditionalData(data);
         } catch (error) {
           console.log("Failed to fetch details:", error);
-          const errorMes = (error as Error)?.message || String(error);
-          if (errorMes?.includes("404")) {
+          const errorMes = (error as any)?.message || error?.toString();
+          if (errorMes?.includes("404") || errorMes.includes("404")) {
             setAdditionalData({ notSynced: true });
           } else {
             setDetailsError("Failed to load detailed information.");
@@ -164,8 +161,10 @@ const Table = <TData extends { id: GridRowId }>({
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              backgroundColor: (theme) => 
-                theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.02)" : "rgba(0, 0, 0, 0.01)",
+              backgroundColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? "rgba(255, 255, 255, 0.02)"
+                  : "rgba(0, 0, 0, 0.01)",
             }}
           >
             <Box sx={{ gap: 2, display: "flex" }}>
@@ -245,8 +244,10 @@ const Table = <TData extends { id: GridRowId }>({
                 "& .MuiDataGrid-main": { border: "none" },
                 "& .MuiDataGrid-columnHeaders": {
                   borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-                  backgroundColor: (theme) => 
-                    theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.03)" : "rgba(0, 0, 0, 0.02)",
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.03)"
+                      : "rgba(0, 0, 0, 0.02)",
                 },
                 "& .MuiDataGrid-cell": {
                   borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
@@ -259,14 +260,14 @@ const Table = <TData extends { id: GridRowId }>({
                     backgroundColor: (theme) => theme.palette.action.hover,
                   },
                   "&.Mui-selected": {
-                    backgroundColor: (theme) => 
-                      theme.palette.mode === "dark" 
-                        ? "rgba(66, 103, 177, 0.15) !important" 
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "dark"
+                        ? "rgba(66, 103, 177, 0.15) !important"
                         : "rgba(66, 103, 177, 0.08) !important",
                     "&:hover": {
-                      backgroundColor: (theme) => 
-                        theme.palette.mode === "dark" 
-                          ? "rgba(66, 103, 177, 0.25) !important" 
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === "dark"
+                          ? "rgba(66, 103, 177, 0.25) !important"
                           : "rgba(66, 103, 177, 0.12) !important",
                     },
                   },
@@ -295,7 +296,10 @@ const Table = <TData extends { id: GridRowId }>({
           sx: {
             width: { xs: "100%", sm: 420, md: 520 },
             p: 0,
-            boxShadow: (theme) => theme.palette.mode === "dark" ? "-4px 0 20px rgba(0,0,0,0.5)" : "-4px 0 20px rgba(0,0,0,0.05)",
+            boxShadow: (theme) =>
+              theme.palette.mode === "dark"
+                ? "-4px 0 20px rgba(0,0,0,0.5)"
+                : "-4px 0 20px rgba(0,0,0,0.05)",
           },
         }}
       >
@@ -307,7 +311,7 @@ const Table = <TData extends { id: GridRowId }>({
             sx={{ p: 2, pl: 2.5 }}
           >
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              {title}
+              Details
             </Typography>
             <IconButton onClick={() => setDetailOpen(false)}>
               <CloseIcon />
@@ -329,9 +333,12 @@ const Table = <TData extends { id: GridRowId }>({
               </Box>
             )}
 
-            {!detailsLoading && !detailsError && selectedRow && renderDetails && (
-              <>{renderDetails(selectedRow, additionalData ?? null)}</>
-            )}
+            {!detailsLoading &&
+              !detailsError &&
+              selectedRow &&
+              renderDetails && (
+                <>{renderDetails(selectedRow, additionalData ?? null)}</>
+              )}
           </Box>
         </Stack>
       </Drawer>

@@ -10,7 +10,6 @@ import {
   InputAdornment,
   Link,
   IconButton,
-  Stack,
   Box,
   Paper,
 } from "@mui/material";
@@ -19,8 +18,6 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { SignInPage } from "@toolpad/core/SignInPage";
 import { useTheme } from "@mui/material/styles";
-
-import bs from "../../shared/UI/img/bs.png";
 
 const providers = [{ id: "credentials", name: "Email and Password" }];
 
@@ -159,72 +156,53 @@ function RememberMeCheckbox() {
 
 export function LoginPage() {
   return (
-    <Stack
-      direction="row"
+    <Box
       sx={{
-        minHeight: "100vh",
+        height: "100vh",
         width: "100vw",
+        display: "grid",
+        placeItems: "center",
         backgroundColor: "background.default",
       }}
     >
-      <Box
+      <Paper
+        elevation={0}
         sx={{
-          flex: 1,
-          display: { xs: "none", md: "block" },
-          backgroundImage: `url(${bs})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          position: "relative",
-        }}
-      />
-      <Stack
-        alignItems="center"
-        justifyContent="center"
-        sx={{
-          flex: 1,
-          p: { xs: 2, md: 6 },
-          backgroundColor: "background.default",
+          maxWidth: 480,
+          width: "100%",
+          backgroundColor: "transparent",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        <Paper
-          elevation={0}
-          sx={{
-            maxWidth: 480,
-            width: "100%",
-            backgroundColor: "transparent",
-            display: "flex",
-            flexDirection: "column",
+        <SignInPage
+          signIn={(_provider, formData) =>
+            alert(`Logging in with: ${formData.get("email")}`)
+          }
+          slots={{
+            title: Title,
+            emailField: CustomEmailField,
+            passwordField: CustomPasswordField,
+            submitButton: CustomButton,
+            signUpLink: SignUpLink,
+            rememberMe: RememberMeCheckbox,
+            forgotPasswordLink: ForgotPasswordLink,
           }}
-        >
-          <SignInPage
-            signIn={(_provider, formData) =>
-              alert(`Logging in with: ${formData.get("email")}`)
-            }
-            slots={{
-              title: Title,
-              emailField: CustomEmailField,
-              passwordField: CustomPasswordField,
-              submitButton: CustomButton,
-              signUpLink: SignUpLink,
-              rememberMe: RememberMeCheckbox,
-              forgotPasswordLink: ForgotPasswordLink,
-            }}
-            providers={providers}
-            sx={{
-              "& .MuiTypography-root": {
-                color: "text.primary",
+          providers={providers}
+          sx={{
+            "& .MuiTypography-root": {
+              color: "text.primary",
+            },
+            "& .MuiLink-root": {
+              color: "primary.main",
+              textDecoration: "none",
+              "&:hover": {
+                textDecoration: "underline",
               },
-              "& .MuiLink-root": {
-                color: "primary.main",
-                textDecoration: "none",
-                "&:hover": {
-                  textDecoration: "underline",
-                },
-              },
-            }}
-          />
-        </Paper>
-      </Stack>
-    </Stack>
+            },
+          }}
+        />
+      </Paper>
+    </Box>
   );
 }
