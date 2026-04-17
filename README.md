@@ -4,8 +4,8 @@ Network Management System Frontend — a modern SPA for monitoring and configuri
 
 ## Tech Stack
 - **React 19** + **TypeScript** + **Vite**
-- **UI & Styling:** MUI v7, Emotion, CSS Modules
-- **Charts & Tables:** Recharts, TanStack React Table
+- **UI & Styling:** MUI v7, Emotion
+- **Charts & Tables:** Recharts
 - **Routing:** React Router v7
 
 ## Getting Started
