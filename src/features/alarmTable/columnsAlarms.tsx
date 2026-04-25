@@ -6,7 +6,7 @@ import type { Alarms } from "../../entities/Alarms";
 export const alarmTableColumns: GridColDef<Alarms>[] = [
   {
     field: "status",
-    headerName: "Status",
+    headerName: "Severity",
     flex: 1,
     renderCell: (params) => <Status status={params.value as AllStatuses} />,
   },
@@ -24,11 +24,5 @@ export const alarmTableColumns: GridColDef<Alarms>[] = [
     field: "spec_problem",
     headerName: "Specific Problem",
     flex: 1,
-  },
-  {
-    field: "details",
-    headerName: "Details",
-    flex: 0.5,
-    renderCell: () => null,
   },
 ];

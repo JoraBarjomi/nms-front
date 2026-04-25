@@ -109,8 +109,15 @@ function Title() {
   return (
     <Box sx={{ mb: 1 }}>
       <h2 style={{ margin: 0, fontSize: "2rem", fontWeight: 700 }}>Sign up</h2>
+      <p style={{ margin: 0, opacity: 0.7 }}>
+        Please enter your details to create an account.
+      </p>
     </Box>
   );
+}
+
+function Subtitle() {
+  return <p style={{ margin: 0, opacity: 0.7 }}></p>;
 }
 
 function RememberMeCheckbox() {
@@ -161,11 +168,12 @@ export function RegisterPage() {
       >
         <SignInPage
           signIn={(_provider, formData) => {
-            alert(`Logging in with: ${formData.get("email")}`);
-            navigate("/dashboard");
+            alert(`Sign up with: ${formData.get("email")}`);
+            navigate("/profile");
           }}
           slots={{
             title: Title,
+            subtitle: Subtitle,
             emailField: CustomEmailField,
             passwordField: CustomPasswordField,
             submitButton: CustomButton,

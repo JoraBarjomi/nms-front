@@ -16,21 +16,13 @@ import { ElementsAddPage } from "../pages/elementsAdd/elementsAdd";
 import { RegisterPage } from "../pages/register";
 import { LoginPage } from "../pages/login";
 import { DashboardPage } from "../pages/dashboard";
-import { AlarmsPage } from "../pages/alarms";
+import { AlarmsPage } from "../pages/alarms/alarms";
 import { LogsPage } from "../pages/logs";
 import { ConfigPage } from "../pages/config";
 import { SupportPage } from "../pages/support";
 import { SettingsPage } from "../pages/settings";
 import { ProfilePage } from "../pages/profile";
 import { NotFoundPage } from "../pages/notFound/index";
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-end",
-  padding: theme.spacing(0, 1),
-  ...theme.mixins.toolbar,
-}));
 
 const App: React.FC = () => {
   const [mode, setMode] = useState<"light" | "dark">("dark");
@@ -123,9 +115,17 @@ const App: React.FC = () => {
             component="main"
             sx={{
               flexGrow: 1,
-              minWidth: 0,
+              width: { sm: `calc(100% - ${open ? 250 : 65}px)` },
               display: "flex",
               flexDirection: "column",
+              overflowY: "auto",
+              transition: (theme) =>
+                theme.transitions.create(["width", "margin"], {
+                  easing: theme.transitions.easing.sharp,
+                  duration: open
+                    ? theme.transitions.duration.enteringScreen
+                    : theme.transitions.duration.leavingScreen,
+                }),
             }}
           >
             <Header
@@ -134,7 +134,6 @@ const App: React.FC = () => {
               userInfo={"G"}
               isLogin={false}
             />
-            <DrawerHeader />
             <Box sx={{ p: 3, flexGrow: 1, color: "text.primary" }}>
               <Routes>
                 <Route path="/" element={<HomePage />}></Route>

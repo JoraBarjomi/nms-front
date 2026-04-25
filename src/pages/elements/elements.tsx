@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   fetchNetworkElements,
   fetchDetailedNetworkElementById,
@@ -43,6 +44,7 @@ const fetchElementDetails = async (id: GridRowId) => {
 };
 
 export function ElementsPage() {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [elements, setElements] = useState<NetworkElement[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -138,13 +140,16 @@ export function ElementsPage() {
     }
   };
 
+  const columns = useMemo(() => getElementsTableColumns(), []);
+
   return (
     <Box>
       <Table
         title="Network Elements"
         rows={elements}
-        columns={getElementsTableColumns()}
+        columns={columns}
         fetchDetails={fetchElementDetails}
+        onAdd={() => navigate("/elements/add")}
         renderDetails={(row, additionalData) => (
           <Paper
             elevation={0}

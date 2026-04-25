@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   DataGrid,
   type GridColDef,
@@ -28,8 +27,9 @@ type TableProps<TData extends { id: GridRowId }> = {
   rows: TData[];
   columns: GridColDef<TData>[];
   title?: string;
-  renderDetails?: (row: TData, additionalData: any) => React.ReactNode;
-  fetchDetails?: (id: GridRowId) => Promise<any>;
+  renderDetails?: (row: TData, additionalData: unknown) => React.ReactNode;
+  fetchDetails?: (id: GridRowId) => Promise<unknown>;
+  onAdd?: () => void;
 };
 
 const Table = <TData extends { id: GridRowId }>({
@@ -37,11 +37,11 @@ const Table = <TData extends { id: GridRowId }>({
   columns = [],
   renderDetails,
   fetchDetails,
+  onAdd,
 }: TableProps<TData>) => {
-  const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const safeRows = rows ?? [];
-  const safeColumns = columns ?? [];
+  const safeRows = useMemo(() => rows ?? [], [rows]);
+  const safeColumns = useMemo(() => columns ?? [], [columns]);
   const [selectedRowId, setSelectedRowId] = useState<GridRowId | null>(
     safeRows?.[0]?.id ?? null,
   );
@@ -54,7 +54,7 @@ const Table = <TData extends { id: GridRowId }>({
 
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [detailsError, setDetailsError] = useState<string | null>(null);
-  const [additionalData, setAdditionalData] = useState<any>(null);
+  const [additionalData, setAdditionalData] = useState<unknown>(null);
 
   useEffect(() => {
     if (!safeRows || safeRows.length === 0) {
@@ -108,7 +108,7 @@ const Table = <TData extends { id: GridRowId }>({
           setAdditionalData(data);
         } catch (error) {
           console.log("Failed to fetch details:", error);
-          const errorMes = (error as any)?.message || error?.toString();
+          const errorMes = (error as Error)?.message || String(error);
           if (errorMes?.includes("404") || errorMes.includes("404")) {
             setAdditionalData({ notSynced: true });
           } else {
@@ -137,7 +137,7 @@ const Table = <TData extends { id: GridRowId }>({
   }, []);
 
   return (
-    <Box>
+    <Box sx={{ mb: 4 }}>
       <Box
         sx={{
           width: "100%",
@@ -176,7 +176,6 @@ const Table = <TData extends { id: GridRowId }>({
               >
                 Select All
               </Button>
-
               <Button
                 size="small"
                 variant="outlined"
@@ -186,15 +185,17 @@ const Table = <TData extends { id: GridRowId }>({
                 Clear
               </Button>
 
-              <Button
-                size="small"
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={() => navigate("/elements/add")}
-                sx={{ height: 36 }}
-              >
-                Add
-              </Button>
+              {onAdd && (
+                <Button
+                  size="small"
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  onClick={onAdd}
+                  sx={{ height: 36 }}
+                >
+                  Add
+                </Button>
+              )}
             </Box>
 
             <TextField
@@ -218,8 +219,9 @@ const Table = <TData extends { id: GridRowId }>({
 
           <Box
             sx={{
-              height: "70vh", // Таблица будет занимать 70% высоты экрана
               width: "100%",
+              height: { xs: 500, md: "calc(100vh - 280px)" },
+              minHeight: 450,
             }}
           >
             <DataGrid
@@ -232,10 +234,10 @@ const Table = <TData extends { id: GridRowId }>({
               disableRowSelectionOnClick
               rowSelectionModel={rowSelectionModel}
               onRowSelectionModelChange={setRowSelectionModel}
-              pageSizeOptions={[10, 25, 50]}
+              pageSizeOptions={[5, 10, 15]}
               initialState={{
                 pagination: {
-                  paginationModel: { pageSize: 10, page: 0 },
+                  paginationModel: { pageSize: 5, page: 0 },
                 },
               }}
               sx={{

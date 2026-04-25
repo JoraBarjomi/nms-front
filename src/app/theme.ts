@@ -61,6 +61,28 @@ export const getAppTheme = (mode: PaletteMode) => {
       fontFamily: '"Poppins", sans-serif',
     },
     components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            scrollbarColor: isDark ? "#475569 #151921" : "#94A3B8 #F8FAFC",
+            scrollbarWidth: "thin",
+            "&::-webkit-scrollbar, & *::-webkit-scrollbar": {
+              width: "8px",
+              height: "8px",
+            },
+            "&::-webkit-scrollbar-track, & *::-webkit-scrollbar-track": {
+              background: isDark ? "#151921" : "#F8FAFC",
+            },
+            "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
+              background: isDark ? "#475569" : "#cbd5e1",
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-thumb:hover, & *::-webkit-scrollbar-thumb:hover": {
+              background: isDark ? "#64748B" : "#94A3B8",
+            },
+          },
+        },
+      },
       MuiButton: {
         styleOverrides: {
           root: {

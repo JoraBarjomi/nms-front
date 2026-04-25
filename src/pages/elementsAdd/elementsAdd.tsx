@@ -68,6 +68,13 @@ export function ElementsAddPage() {
     capabilities: [] as string[],
   });
 
+  const [errors, setErrors] = useState({
+    name: "",
+    ipAddress: "",
+    vendor: "",
+    capabilities: "",
+  });
+
   const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
@@ -79,6 +86,48 @@ export function ElementsAddPage() {
     severity: "success",
   });
 
+  const validateForm = () => {
+    const newErrors = {
+      name: "",
+      ipAddress: "",
+      vendor: "",
+      capabilities: "",
+    };
+    let isValid = true;
+
+    if (!elementData.name.trim()) {
+      newErrors.name = "Name is required";
+      isValid = false;
+    } else if (elementData.name.trim().length < 3) {
+      newErrors.name = "Name must be at least 3 characters";
+      isValid = false;
+    }
+
+    const ipSegments = elementData.ipAddress
+      .split(".")
+      .map((s) => s.replace(/_/g, "").trim());
+    const isIpComplete =
+      ipSegments.length === 4 && ipSegments.every((s) => s.length > 0);
+
+    if (!isIpComplete) {
+      newErrors.ipAddress = "Please enter a full IP address (e.g., 10.0.0.1)";
+      isValid = false;
+    }
+
+    if (!elementData.vendor) {
+      newErrors.vendor = "Please select a vendor";
+      isValid = false;
+    }
+
+    if (elementData.capabilities.length === 0) {
+      newErrors.capabilities = "Please select at least one capability";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleChange = (
     e:
       | SelectChangeEvent<string | string[]>
@@ -89,9 +138,14 @@ export function ElementsAddPage() {
       ...prev,
       [name as string]: value,
     }));
+    if (errors[name as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [name as string]: "" }));
+    }
   };
 
   const handleCreate = async () => {
+    if (!validateForm()) return;
+
     setLoading(true);
     try {
       const payload = {
@@ -126,6 +180,12 @@ export function ElementsAddPage() {
       vendor: "",
       capabilities: [],
     });
+    setErrors({
+      name: "",
+      ipAddress: "",
+      vendor: "",
+      capabilities: "",
+    });
   };
 
   const handleCloseSnackbar = () => {
@@ -153,6 +213,8 @@ export function ElementsAddPage() {
             placeholder="enb-1"
             value={elementData.name}
             onChange={handleChange}
+            error={!!errors.name}
+            helperText={errors.name}
             fullWidth
             variant="outlined"
           />
@@ -165,6 +227,8 @@ export function ElementsAddPage() {
             placeholder="10.0.0.1"
             value={elementData.ipAddress}
             onChange={handleChange}
+            error={!!errors.ipAddress}
+            helperText={errors.ipAddress}
             fullWidth
             variant="outlined"
             InputProps={{
@@ -172,7 +236,7 @@ export function ElementsAddPage() {
             }}
           />
 
-          <FormControl fullWidth>
+          <FormControl fullWidth error={!!errors.vendor}>
             <InputLabel>Vendor</InputLabel>
             <Select
               name="vendor"
@@ -185,9 +249,18 @@ export function ElementsAddPage() {
               <MenuItem value={"vendor-b"}>Vendor-B</MenuItem>
               <MenuItem value={"vendor-c"}>Vendor-C</MenuItem>
             </Select>
+            {errors.vendor && (
+              <Typography
+                variant="caption"
+                color="error"
+                sx={{ ml: 1.5, mt: 0.5 }}
+              >
+                {errors.vendor}
+              </Typography>
+            )}
           </FormControl>
 
-          <FormControl fullWidth>
+          <FormControl fullWidth error={!!errors.capabilities}>
             <InputLabel>Capabilities</InputLabel>
             <Select
               multiple
@@ -208,6 +281,15 @@ export function ElementsAddPage() {
               <MenuItem value={"b"}>b</MenuItem>
               <MenuItem value={"c"}>c</MenuItem>
             </Select>
+            {errors.capabilities && (
+              <Typography
+                variant="caption"
+                color="error"
+                sx={{ ml: 1.5, mt: 0.5 }}
+              >
+                {errors.capabilities}
+              </Typography>
+            )}
           </FormControl>
 
           <Stack

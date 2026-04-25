@@ -1,54 +1,31 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import { styled } from "@mui/material/styles";
-import MuiAppBar, {
-  type AppBarProps as MuiAppBarProps,
-} from "@mui/material/AppBar";
+import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-
-const drawerWidth = 250;
-
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})<AppBarProps>(({ theme, open }) => ({
-  backgroundColor: theme.palette.background.paper,
-  color: theme.palette.text.primary,
-  boxShadow: "none",
-  zIndex: theme.zIndex.drawer,
-  transition: theme.transitions.create(["margin", "width"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  width: `calc(100% - ${theme.spacing(8)} + 1px)`,
-  marginLeft: theme.spacing(8),
-
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
+import { useTheme } from "@mui/material/styles";
 
 type HeaderProps = {
   curPage?: React.ReactNode;
   userInfo?: React.ReactNode;
   isLogin?: boolean;
-  open?: boolean;
 };
 
-export function Header({ curPage, userInfo, isLogin, open }: HeaderProps) {
+export function Header({ curPage, userInfo, isLogin }: HeaderProps) {
+  const theme = useTheme();
+
   return (
-    <AppBar position="fixed" open={open}>
+    <MuiAppBar
+      position="static"
+      sx={{
+        backgroundColor: theme.palette.background.paper,
+        color: theme.palette.text.primary,
+        boxShadow: "none",
+        borderBottom: `1px solid ${theme.palette.divider}`,
+      }}
+    >
       <Toolbar
         sx={{
           pl: 3,
@@ -79,6 +56,6 @@ export function Header({ curPage, userInfo, isLogin, open }: HeaderProps) {
           </Button>
         )}
       </Toolbar>
-    </AppBar>
+    </MuiAppBar>
   );
 }
