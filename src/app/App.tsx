@@ -6,7 +6,6 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import { getAppTheme } from "./theme";
 
 import Box from "@mui/material/Box";
-import { styled } from "@mui/material/styles";
 import { SideMenu } from "../widgets/SideMenu/SideMenu";
 import { Header } from "../widgets/Header/Header";
 

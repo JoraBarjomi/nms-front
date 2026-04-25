@@ -11,6 +11,7 @@ type HeaderProps = {
   curPage?: React.ReactNode;
   userInfo?: React.ReactNode;
   isLogin?: boolean;
+  open?: boolean;
 };
 
 export function Header({ curPage, userInfo, isLogin }: HeaderProps) {
