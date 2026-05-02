@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   Button,
   FormControl,
@@ -108,7 +108,12 @@ function CustomButton() {
 
 function SignUpLink() {
   return (
-    <Link href="/register" variant="body2" sx={{ fontWeight: 500 }}>
+    <Link
+      component={RouterLink}
+      to="/register"
+      variant="body2"
+      sx={{ fontWeight: 500 }}
+    >
       Create an account
     </Link>
   );
@@ -116,7 +121,12 @@ function SignUpLink() {
 
 function ForgotPasswordLink() {
   return (
-    <Link href="/" variant="body2" sx={{ fontWeight: 500 }}>
+    <Link
+      component={RouterLink}
+      to="/"
+      variant="body2"
+      sx={{ fontWeight: 500 }}
+    >
       Forgot password?
     </Link>
   );
