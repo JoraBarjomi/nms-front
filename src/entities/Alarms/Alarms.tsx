@@ -1,4 +1,4 @@
-import { type AllStatuses } from "../shared/constants/allStatuses";
+import { type AllStatuses } from "../../shared/constants/allStatuses";
 
 export type Alarms = {
   id: number;

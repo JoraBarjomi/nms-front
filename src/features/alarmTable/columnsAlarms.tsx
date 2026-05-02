@@ -1,7 +1,7 @@
 import { type GridColDef } from "@mui/x-data-grid";
 import { Status } from "../../shared/UI/components/Status/Status";
 import type { AllStatuses } from "../../shared/constants/allStatuses";
-import type { Alarms } from "../../entities/Alarms";
+import type { Alarms } from "../../entities/Alarms/Alarms";
 
 export const alarmTableColumns: GridColDef<Alarms>[] = [
   {

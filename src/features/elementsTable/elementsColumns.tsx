@@ -2,7 +2,7 @@ import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 
 import { Status } from "../../shared/UI/components/Status/Status";
 import type { AllStatuses } from "../../shared/constants/allStatuses";
-import type { NetworkElement } from "../../entities/Element";
+import type { NetworkElement } from "../../entities/Element/Element";
 
 const formatId = (id: string | null) => {
   if (!id) return "";
