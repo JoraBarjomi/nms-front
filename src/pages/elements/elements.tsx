@@ -5,8 +5,8 @@ import {
   fetchDetailedNetworkElementById,
   deleteNetworkElements,
   syncNetworkElements,
-} from "./api/api";
-import { type NetworkElement } from "../../entities/Element";
+} from "../../entities/Element/api/apiElement";
+import { type NetworkElement } from "../../entities/Element/Element";
 import { getElementsTableColumns } from "../../features/elementsTable/elementsColumns";
 import Table from "../../widgets/Table/Table";
 import { type AllStatuses } from "../../shared/constants/allStatuses";
@@ -262,7 +262,7 @@ export function ElementsPage() {
                 Capabilities:{" "}
               </Typography>
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                {row.capabilities.map((cap, index) => (
+                {row.capabilities.map((cap: string, index: number) => (
                   <Chip
                     key={index}
                     label={cap}

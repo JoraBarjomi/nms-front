@@ -1,21 +1,24 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { getInitials } from "../../shared/utils/authHelpers";
+import { getUser } from "../../shared/utils/authHelpers";
 
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 type HeaderProps = {
   curPage?: React.ReactNode;
-  userInfo?: React.ReactNode;
   isLogin?: boolean;
   open?: boolean;
 };
 
-export function Header({ curPage, userInfo, isLogin }: HeaderProps) {
+export function Header({ curPage }: HeaderProps) {
   const theme = useTheme();
+  const user = getUser();
 
   return (
     <MuiAppBar
@@ -44,12 +47,29 @@ export function Header({ curPage, userInfo, isLogin }: HeaderProps) {
           {curPage}
         </Typography>
 
-        {isLogin ? (
+        {user ? (
           <NavLink
             to="/profile"
-            style={{ textDecoration: "none", color: "inherit" }}
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+              display: "block",
+            }}
           >
-            {userInfo}
+            <Avatar
+              sx={{
+                width: 44,
+                height: 44,
+                mt: 2,
+                mb: 2,
+                fontSize: "1.25rem",
+                lineHeight: 1,
+                bgcolor: "primary.main",
+                color: "primary.contrastText",
+              }}
+            >
+              {getInitials(user.username)}
+            </Avatar>
           </NavLink>
         ) : (
           <Button variant="contained" component={NavLink} to="/login">

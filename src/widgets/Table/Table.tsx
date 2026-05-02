@@ -59,6 +59,7 @@ const Table = <TData extends { id: GridRowId }>({
   useEffect(() => {
     if (!safeRows || safeRows.length === 0) {
       setSelectedRowId(null);
+      setDetailOpen(false);
       return;
     }
 
@@ -67,6 +68,7 @@ const Table = <TData extends { id: GridRowId }>({
       !safeRows.some((row) => row?.id === selectedRowId)
     ) {
       setSelectedRowId(safeRows[0]?.id ?? null);
+      setDetailOpen(false);
       return;
     }
 

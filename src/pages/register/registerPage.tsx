@@ -18,6 +18,8 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { SignInPage } from "@toolpad/core/SignInPage";
 import { useTheme } from "@mui/material/styles";
 
+import { registerUser } from "../../features/auth/auth";
+
 const providers = [{ id: "credentials", name: "Email and Password" }];
 
 function CustomEmailField() {
@@ -25,8 +27,8 @@ function CustomEmailField() {
     <>
       <TextField
         id="input-with-icon-textfield"
-        label="Full name"
-        name="name"
+        label="Username"
+        name="username"
         type="text"
         size="small"
         required
@@ -167,9 +169,21 @@ export function RegisterPage() {
         }}
       >
         <SignInPage
-          signIn={(_provider, formData) => {
-            alert(`Sign up with: ${formData.get("email")}`);
-            navigate("/profile");
+          signIn={async (_provider, formData) => {
+            const email = formData.get("email") as string;
+            const username = formData.get("username") as string;
+            const password = formData.get("password") as string;
+            try {
+              await registerUser({
+                email,
+                username,
+                password,
+              });
+              navigate("/login");
+              return {};
+            } catch (err) {
+              return { error: (err as Error).message };
+            }
           }}
           slots={{
             title: Title,

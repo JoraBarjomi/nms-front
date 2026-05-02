@@ -12,16 +12,18 @@ import { Header } from "../widgets/Header/Header";
 import { HomePage } from "../pages/home/home";
 import { ElementsPage } from "../pages/elements/elements";
 import { ElementsAddPage } from "../pages/elementsAdd/elementsAdd";
-import { RegisterPage } from "../pages/register";
-import { LoginPage } from "../pages/login";
+import { RegisterPage } from "../pages/register/registerPage";
+import { LoginPage } from "../pages/login/login";
 import { DashboardPage } from "../pages/dashboard";
 import { AlarmsPage } from "../pages/alarms/alarms";
 import { LogsPage } from "../pages/logs";
-import { ConfigPage } from "../pages/config";
+import { ConfigPage } from "../pages/config/configPage";
 import { SupportPage } from "../pages/support";
 import { SettingsPage } from "../pages/settings";
-import { ProfilePage } from "../pages/profile";
+import { ProfilePage } from "../pages/profile/profilePage";
 import { NotFoundPage } from "../pages/notFound/index";
+
+import { getUser } from "../shared/utils/authHelpers";
 
 const App: React.FC = () => {
   const [mode, setMode] = useState<"light" | "dark">("dark");
@@ -31,6 +33,7 @@ const App: React.FC = () => {
   };
   const location = useLocation();
   const [open, setOpen] = useState(true);
+  const user = getUser();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -77,7 +80,7 @@ const App: React.FC = () => {
       case "/settings":
         return "Settings";
       case "/profile":
-        return "Profile/username";
+        return `Profile/${user?.username}`;
       case "/login":
         return "Login";
       case "/register":
@@ -127,12 +130,7 @@ const App: React.FC = () => {
                 }),
             }}
           >
-            <Header
-              open={open}
-              curPage={getPageTitle(location.pathname)}
-              userInfo={"G"}
-              isLogin={false}
-            />
+            <Header open={open} curPage={getPageTitle(location.pathname)} />
             <Box sx={{ p: 3, flexGrow: 1, color: "text.primary" }}>
               <Routes>
                 <Route path="/" element={<HomePage />}></Route>

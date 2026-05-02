@@ -10,7 +10,7 @@ import {
   MaintIcon,
   PlotIcon,
 } from "../../shared/UI/icons/icons";
-import { AlarmsData } from "../../entities/Alarms";
+import { AlarmsData } from "../../entities/Alarms/Alarms";
 import { countBy } from "../../shared/utils/countBy";
 import { ALL_STATUSES } from "../../shared/constants/allStatuses";
 import Table from "../../widgets/Table/Table";

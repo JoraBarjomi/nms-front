@@ -1,4 +1,4 @@
-import type { AllStatuses } from "../shared/constants/allStatuses";
+import type { AllStatuses } from "../../shared/constants/allStatuses";
 
 export interface NetworkElement {
   id: string;
@@ -11,4 +11,10 @@ export interface NetworkElement {
   updated_at: string;
 }
 
-
+export interface CMHistoryItem {
+  id?: string;
+  ne_id: string;
+  parameter: string;
+  value: string;
+  status?: string;
+}

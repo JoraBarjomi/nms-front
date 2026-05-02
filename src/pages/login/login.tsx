@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   FormControl,
@@ -18,6 +19,8 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { SignInPage } from "@toolpad/core/SignInPage";
 import { useTheme } from "@mui/material/styles";
+
+import { loginUser } from "../../features/auth/auth";
 
 const providers = [{ id: "credentials", name: "Email and Password" }];
 
@@ -155,6 +158,7 @@ function RememberMeCheckbox() {
 }
 
 export function LoginPage() {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -176,9 +180,18 @@ export function LoginPage() {
         }}
       >
         <SignInPage
-          signIn={(_provider, formData) =>
-            alert(`Logging in with: ${formData.get("email")}`)
-          }
+          signIn={async (_provider, formData) => {
+            const email = formData.get("email") as string;
+            const password = formData.get("password") as string;
+            try {
+              const result = await loginUser({ email, password });
+              localStorage.setItem("token", result.token);
+              navigate("/profile");
+              return {};
+            } catch (err) {
+              return { error: (err as Error).message };
+            }
+          }}
           slots={{
             title: Title,
             emailField: CustomEmailField,

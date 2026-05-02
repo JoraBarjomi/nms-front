@@ -16,7 +16,7 @@ import {
   type SlideProps,
   Box,
 } from "@mui/material";
-import { createNetworkElement } from "./api/api";
+import { createNetworkElement } from "../../entities/Element/api/apiElement";
 import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
