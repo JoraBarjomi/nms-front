@@ -41,7 +41,15 @@
 
 ## About The Project
 
-[![Product Name Screen Shot](https://i.postimg.cc/RqdkN7kW/screenshot.png)](https://nms-front.vercel.app/)
+<div align="center">
+  <a href="https://postimg.cc/RqdkN7kW">
+    <img src="https://i.postimg.cc/TYvfNQQJ/Pasted-image.png" alt="NMS Dashboard Screenshot" width="100%">
+  </a>
+</div>
+
+<br />
+
+This project is a frontend implementation of a **Network Management System (NMS)**, specifically designed for monitoring and managing LTE network elements.
 
 ### Built With
 
