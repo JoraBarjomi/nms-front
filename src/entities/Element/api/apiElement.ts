@@ -1,11 +1,26 @@
 import { type NetworkElement } from "../Element";
-import { getToken } from "../../../shared/utils/authHelpers";
+import { getToken, logout } from "../../../shared/utils/authHelpers";
 
 export const fetchNetworkElements = async (): Promise<NetworkElement[]> => {
-  const response = await fetch("/api/v1/ne");
+  const token = getToken();
+  const response = await fetch(`/api/v1/ne`, {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired! Please login.");
+  }
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    const errorBody = (await response.json().catch(() => ({}))) as {
+      error?: string;
+    };
+    const message = errorBody.error || `HTTP error! status: ${response.status}`;
+    throw new Error(`${message} (${response.status})`);
   }
 
   return response.json();
@@ -14,11 +29,18 @@ export const fetchNetworkElements = async (): Promise<NetworkElement[]> => {
 export const fetchDetailedNetworkElementById = async (
   id: string,
 ): Promise<unknown> => {
+  const token = getToken();
   const response = await fetch(`/api/v1/ne/${id}/inventory/latest`, {
     headers: {
       Accept: "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
+
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired! Please login.");
+  }
 
   if (!response.ok) {
     const errorBody = (await response.json().catch(() => ({}))) as {
@@ -32,12 +54,19 @@ export const fetchDetailedNetworkElementById = async (
 };
 
 export const deleteNetworkElements = async (id: string): Promise<void> => {
+  const token = getToken();
   const response = await fetch(`/api/v1/ne/${id}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
+
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired! Please login.");
+  }
 
   if (!response.ok) {
     const errorBody = (await response.json().catch(() => ({}))) as {
@@ -49,12 +78,19 @@ export const deleteNetworkElements = async (id: string): Promise<void> => {
 };
 
 export const syncNetworkElements = async (id: string): Promise<unknown> => {
+  const token = getToken();
   const response = await fetch(`/api/v1/ne/${id}/inventory/sync`, {
     method: "POST",
     headers: {
       Accept: "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
+
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired! Please login.");
+  }
 
   if (!response.ok) {
     const errorBody = (await response.json().catch(() => ({}))) as {
@@ -73,6 +109,7 @@ export async function createNetworkElement(formData: {
   vendor: string;
   capabilities: string;
 }) {
+  const token = getToken();
   const payload = {
     name: formData.name,
     address: formData.ipAddress,
@@ -87,16 +124,22 @@ export async function createNetworkElement(formData: {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
   });
+
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired! Please login.");
+  }
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   return response.json();
 }
 
-export const fetchCMNetworkElementById = async () => {
+export const fetchCMNetworkElement = async () => {
   const token = getToken();
   const response = await fetch(`/api/v1/cm/requests`, {
     headers: {
@@ -105,6 +148,10 @@ export const fetchCMNetworkElementById = async () => {
     },
   });
 
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired! Please login.");
+  }
   if (!response.ok) {
     const errorBody = (await response.json().catch(() => ({}))) as {
       error?: string;
@@ -137,6 +184,12 @@ export async function changeNetworkElement(formData: {
     },
     body: JSON.stringify(payload),
   });
+
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired! Please login.");
+  }
+
   if (!response.ok) {
     try {
       const errorData = await response.json();

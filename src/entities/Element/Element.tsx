@@ -17,4 +17,5 @@ export interface CMHistoryItem {
   parameter: string;
   value: string;
   status?: string;
+  created_by?: string;
 }

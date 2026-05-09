@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import { useState, useMemo } from "react";
 
 import { ThemeProvider, CssBaseline } from "@mui/material";
@@ -24,6 +24,7 @@ import { ProfilePage } from "../pages/profile/profilePage";
 import { NotFoundPage } from "../pages/notFound/index";
 
 import { getUser } from "../shared/utils/authHelpers";
+import { ProtectedRoute } from "../shared/utils/protectedRoute";
 
 const App: React.FC = () => {
   const [mode, setMode] = useState<"light" | "dark">("dark");
@@ -42,20 +43,6 @@ const App: React.FC = () => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  const layoutPages = [
-    "/",
-    "/elements",
-    "/elements/add",
-    "/dashboard",
-    "/devices",
-    "/alarms",
-    "/logs",
-    "/config",
-    "/support",
-    "/settings",
-    "/profile",
-  ];
 
   const getPageTitle = (pathname: string) => {
     switch (pathname) {
@@ -85,73 +72,79 @@ const App: React.FC = () => {
         return "Login";
       case "/register":
         return "Register";
+      default:
+        return "NMS";
     }
   };
-
-  const showLayout = layoutPages.includes(location.pathname);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {!showLayout ? (
-        <Routes>
-          <Route path="/login" element={<LoginPage />}></Route>
-          <Route path="/register" element={<RegisterPage />}></Route>
-        </Routes>
-      ) : (
-        <Box
-          sx={{
-            display: "flex",
-            height: "100vh",
-            backgroundColor: "background.default",
-          }}
-        >
-          <SideMenu
-            open={open}
-            handleDrawerClose={handleDrawerClose}
-            handleDrawerOpen={handleDrawerOpen}
-            toggleTheme={toggleTheme}
-          />
 
-          <Box
-            component="main"
-            sx={{
-              flexGrow: 1,
-              width: { sm: `calc(100% - ${open ? 250 : 65}px)` },
-              display: "flex",
-              flexDirection: "column",
-              overflowY: "auto",
-              transition: (theme) =>
-                theme.transitions.create(["width", "margin"], {
-                  easing: theme.transitions.easing.sharp,
-                  duration: open
-                    ? theme.transitions.duration.enteringScreen
-                    : theme.transitions.duration.leavingScreen,
-                }),
-            }}
+      <Routes>
+        <Route path="/login" element={<LoginPage />}></Route>
+        <Route path="/register" element={<RegisterPage />}></Route>
+
+        <Route element={<ProtectedRoute />}>
+          <Route
+            element={
+              <Box
+                sx={{
+                  display: "flex",
+                  height: "100vh",
+                  backgroundColor: "background.default",
+                }}
+              >
+                <SideMenu
+                  open={open}
+                  handleDrawerClose={handleDrawerClose}
+                  handleDrawerOpen={handleDrawerOpen}
+                  toggleTheme={toggleTheme}
+                />
+
+                <Box
+                  component="main"
+                  sx={{
+                    flexGrow: 1,
+                    width: { sm: `calc(100% - ${open ? 250 : 65}px)` },
+                    display: "flex",
+                    flexDirection: "column",
+                    overflowY: "auto",
+                    transition: (theme) =>
+                      theme.transitions.create(["width", "margin"], {
+                        easing: theme.transitions.easing.sharp,
+                        duration: open
+                          ? theme.transitions.duration.enteringScreen
+                          : theme.transitions.duration.leavingScreen,
+                      }),
+                  }}
+                >
+                  <Header
+                    open={open}
+                    curPage={getPageTitle(location.pathname)}
+                  />
+
+                  <Box sx={{ p: 3, flexGrow: 1, color: "text.primary" }}>
+                    <Outlet />
+                  </Box>
+                </Box>
+              </Box>
+            }
           >
-            <Header open={open} curPage={getPageTitle(location.pathname)} />
-            <Box sx={{ p: 3, flexGrow: 1, color: "text.primary" }}>
-              <Routes>
-                <Route path="/" element={<HomePage />}></Route>
-                <Route path="/elements" element={<ElementsPage />}></Route>
-                <Route
-                  path="/elements/add"
-                  element={<ElementsAddPage />}
-                ></Route>
-                <Route path="/dashboard" element={<DashboardPage />}></Route>
-                <Route path="/alarms" element={<AlarmsPage />}></Route>
-                <Route path="/logs" element={<LogsPage />}></Route>
-                <Route path="/config" element={<ConfigPage />}></Route>
-                <Route path="/support" element={<SupportPage />}></Route>
-                <Route path="/settings" element={<SettingsPage />}></Route>
-                <Route path="/profile" element={<ProfilePage />}></Route>
-                <Route path="*" element={<NotFoundPage />}></Route>
-              </Routes>
-            </Box>
-          </Box>
-        </Box>
-      )}
+            <Route path="/" element={<HomePage />}></Route>
+            <Route path="/elements" element={<ElementsPage />}></Route>
+            <Route path="/elements/add" element={<ElementsAddPage />}></Route>
+            <Route path="/dashboard" element={<DashboardPage />}></Route>
+            <Route path="/alarms" element={<AlarmsPage />}></Route>
+            <Route path="/logs" element={<LogsPage />}></Route>
+            <Route path="/config" element={<ConfigPage />}></Route>
+            <Route path="/support" element={<SupportPage />}></Route>
+            <Route path="/settings" element={<SettingsPage />}></Route>
+            <Route path="/profile" element={<ProfilePage />}></Route>
+            <Route path="*" element={<NotFoundPage />}></Route>
+          </Route>
+        </Route>
+      </Routes>
     </ThemeProvider>
   );
 };

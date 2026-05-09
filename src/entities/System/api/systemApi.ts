@@ -9,15 +9,3 @@ export const getSystemHealth = async (): Promise<void> => {
   }
   return response.json();
 };
-
-import { type NetworkElement } from "../../../entities/Element/Element";
-
-export const fetchNetworkElements = async (): Promise<NetworkElement[]> => {
-  const response = await fetch("/api/v1/ne");
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response.json();
-};

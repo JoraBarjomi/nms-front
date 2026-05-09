@@ -7,10 +7,8 @@ import { Card } from "../../shared/UI/components/Card/Card";
 import { CardStatus } from "../../shared/UI/components/Card/CardStatus/CardStatus";
 
 import { type NetworkElement } from "../../entities/Element/Element";
-import {
-  getSystemHealth,
-  fetchNetworkElements,
-} from "../../entities/System/api/systemApi";
+import { getSystemHealth } from "../../entities/System/api/systemApi";
+import { fetchNetworkElements } from "../../entities/Element/api/apiElement";
 
 export function HomePage() {
   const [healthStatus, setHealthStatus] = useState<"active" | "critical">(

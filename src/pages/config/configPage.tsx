@@ -32,7 +32,7 @@ import {
 import {
   fetchNetworkElements,
   changeNetworkElement,
-  fetchCMNetworkElementById,
+  fetchCMNetworkElement,
 } from "../../entities/Element/api/apiElement";
 
 export function ConfigPage() {
@@ -81,7 +81,7 @@ export function ConfigPage() {
   const loadHistory = async () => {
     setHistoryLoading(true);
     try {
-      const data = await fetchCMNetworkElementById();
+      const data = await fetchCMNetworkElement();
       setHistory(Array.isArray(data) ? data.reverse() : []);
     } catch (error) {
       console.error("Failed to fetch CM history:", error);
@@ -309,6 +309,7 @@ export function ConfigPage() {
                   </TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>Parameter</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>New Value</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Changed by</TableCell>
                   <TableCell sx={{ fontWeight: 600 }} align="right">
                     Status
                   </TableCell>
@@ -322,12 +323,9 @@ export function ConfigPage() {
                   return (
                     <TableRow key={row.id || index} hover>
                       <TableCell>{displayName}</TableCell>
-                      <TableCell sx={{ fontFamily: "monospace" }}>
-                        {row.parameter}
-                      </TableCell>
-                      <TableCell sx={{ fontFamily: "monospace" }}>
-                        {row.value}
-                      </TableCell>
+                      <TableCell>{row.parameter}</TableCell>
+                      <TableCell>{row.value}</TableCell>
+                      <TableCell>{row.created_by}</TableCell>
                       <TableCell align="right">
                         <Chip
                           label={row.status || "UNKNOWN"}
