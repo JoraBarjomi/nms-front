@@ -41,17 +41,15 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://postimg.cc/RqdkN7kW)
-
-This project is a frontend implementation of a **Network Management System (NMS)**, specifically designed for monitoring and managing LTE network elements.
+[![Product Name Screen Shot](https://i.postimg.cc/RqdkN7kW/screenshot.png)](https://nms-front.vercel.app/)
 
 ### Built With
 
-- [![React][React.js]][React-url]
-- [![TypeScript][TypeScript.ts]][TypeScript-url]
-- [![MUI][MUI.com]][MUI-url]
-- [![ApexCharts][ApexCharts.com]][ApexCharts-url]
-- [![Vite][Vite.dev]][Vite-url]
+[![React][React.js]][React-url]
+[![TypeScript][TypeScript.ts]][TypeScript-url]
+[![MUI][MUI.com]][MUI-url]
+[![ApexCharts][ApexCharts.com]][ApexCharts-url]
+[![Vite][Vite.dev]][Vite-url]
 
 ## Getting Started
 
@@ -70,7 +68,7 @@ This project requires **Node.js** environment and **npm** package manager.
 
 1. Clone the repo
    ```sh
-   git clone [https://github.com/your_username/nms-front.git](https://github.com/your_username/nms-front.git)
+   git clone https://github.com/JoraBarjomi/nms-front
    ```
 2. Install NPM packages
    ```sh
