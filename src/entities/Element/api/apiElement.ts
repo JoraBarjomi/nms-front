@@ -1,15 +1,16 @@
 import { type NetworkElement } from "../Element";
 import { getToken, logout } from "../../../shared/utils/authHelpers";
+import { loggedFetch } from "../../../shared/utils/logHelper";
 
 export const fetchNetworkElements = async (): Promise<NetworkElement[]> => {
   const token = getToken();
-  const response = await fetch(`/api/v1/ne`, {
+  const response = await loggedFetch(`/api/v1/ne`, {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
-
+  console.log("TOKEN:" + token);
   if (response.status === 401) {
     logout();
     throw new Error("Session expired! Please login.");
@@ -30,7 +31,7 @@ export const fetchDetailedNetworkElementById = async (
   id: string,
 ): Promise<unknown> => {
   const token = getToken();
-  const response = await fetch(`/api/v1/ne/${id}/inventory/latest`, {
+  const response = await loggedFetch(`/api/v1/ne/${id}/inventory/latest`, {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
@@ -55,7 +56,7 @@ export const fetchDetailedNetworkElementById = async (
 
 export const deleteNetworkElements = async (id: string): Promise<void> => {
   const token = getToken();
-  const response = await fetch(`/api/v1/ne/${id}`, {
+  const response = await loggedFetch(`/api/v1/ne/${id}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json",
@@ -79,7 +80,7 @@ export const deleteNetworkElements = async (id: string): Promise<void> => {
 
 export const syncNetworkElements = async (id: string): Promise<unknown> => {
   const token = getToken();
-  const response = await fetch(`/api/v1/ne/${id}/inventory/sync`, {
+  const response = await loggedFetch(`/api/v1/ne/${id}/inventory/sync`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -120,7 +121,7 @@ export async function createNetworkElement(formData: {
       .filter(Boolean),
   };
 
-  const response = await fetch("/api/v1/ne", {
+  const response = await loggedFetch("/api/v1/ne", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -141,7 +142,7 @@ export async function createNetworkElement(formData: {
 
 export const fetchCMNetworkElement = async () => {
   const token = getToken();
-  const response = await fetch(`/api/v1/cm/requests`, {
+  const response = await loggedFetch(`/api/v1/cm/requests`, {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
@@ -176,7 +177,7 @@ export async function changeNetworkElement(formData: {
 
   const token = getToken();
 
-  const response = await fetch("/api/v1/cm/requests", {
+  const response = await loggedFetch("/api/v1/cm/requests", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
