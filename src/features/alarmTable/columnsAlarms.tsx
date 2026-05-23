@@ -1,28 +1,28 @@
 import { type GridColDef } from "@mui/x-data-grid";
 import { Status } from "../../shared/UI/components/Status/Status";
-import type { AllStatuses } from "../../shared/constants/allStatuses";
+import type { AllSeverities } from "../../shared/constants/allSeverity";
 import type { Alarms } from "../../entities/Alarms/Alarms";
 
 export const alarmTableColumns: GridColDef<Alarms>[] = [
   {
-    field: "status",
+    field: "severity",
     headerName: "Severity",
     flex: 1,
-    renderCell: (params) => <Status status={params.value as AllStatuses} />,
+    renderCell: (params) => <Status status={params.value as AllSeverities} />,
   },
   {
-    field: "device",
-    headerName: "Device",
+    field: "ne_id",
+    headerName: "NE_ID",
     flex: 1,
   },
   {
-    field: "probable_cause",
-    headerName: "Probable Cause",
+    field: "message",
+    headerName: "Message",
     flex: 1,
   },
   {
-    field: "spec_problem",
-    headerName: "Specific Problem",
+    field: "created_at",
+    headerName: "Created at",
     flex: 1,
   },
 ];

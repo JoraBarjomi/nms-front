@@ -298,7 +298,7 @@ const Table = <TData extends { id: GridRowId }>({
         onClose={() => setDetailOpen(false)}
         PaperProps={{
           sx: {
-            width: { xs: "100%", sm: 420, md: 520 },
+            width: { xs: "100%", sm: 420, md: 540 },
             p: 0,
             boxShadow: (theme) =>
               theme.palette.mode === "dark"

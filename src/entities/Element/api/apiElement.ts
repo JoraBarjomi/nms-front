@@ -206,3 +206,86 @@ export async function changeNetworkElement(formData: {
   }
   return response.json();
 }
+
+export const fetchNetworkElementHealth = async (ne_id: string) => {
+  const token = getToken();
+  const response = await loggedFetch(`/api/v1/ne/${ne_id}/heartbeat/latest`, {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired! Please login.");
+  }
+  if (!response.ok) {
+    const errorBody = (await response.json().catch(() => ({}))) as {
+      error?: string;
+    };
+    const message = errorBody.error || `HTTP error! status: ${response.status}`;
+    throw new Error(`${message} (${response.status})`);
+  }
+
+  return response.json();
+};
+
+export async function powerOffNetworkElement(ne_id: string) {
+  const token = getToken();
+
+  const response = await loggedFetch(`/api/v1/ne/${ne_id}/heartbeat/check`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ healthy: false }),
+  });
+
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired! Please login.");
+  }
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function checkLatestHeartbeat(ne_id: string) {
+  const token = getToken();
+  const response = await loggedFetch(`/api/v1/ne/${ne_id}/heartbeat/latest`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired! Please login.");
+  }
+  if (!response.ok) {
+    return null;
+  }
+  return response.json();
+}
+
+export async function checkHeartbeat(ne_id: string) {
+  const token = getToken();
+  const response = await loggedFetch(`/api/v1/ne/${ne_id}/heartbeat/check`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ healthy: true }),
+  });
+  if (response.status === 401) {
+    logout();
+    throw new Error("Session expired! Please login.");
+  }
+  if (!response.ok) throw new Error("Failed to check heartbeat");
+  return response.json();
+}

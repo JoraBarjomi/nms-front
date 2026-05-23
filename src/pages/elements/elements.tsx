@@ -5,7 +5,11 @@ import {
   fetchDetailedNetworkElementById,
   deleteNetworkElements,
   syncNetworkElements,
+  powerOffNetworkElement,
+  checkLatestHeartbeat,
+  checkHeartbeat,
 } from "../../entities/Element/api/apiElement";
+import { createTestAlarm } from "../../entities/Alarms/api/apiAlarms";
 import { type NetworkElement } from "../../entities/Element/Element";
 import { getElementsTableColumns } from "../../features/elementsTable/elementsColumns";
 import Table from "../../widgets/Table/Table";
@@ -29,11 +33,20 @@ import {
   Slide,
   type SlideProps,
   useTheme,
+  IconButton,
+  Tooltip,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  CircularProgress,
 } from "@mui/material";
 
 import { type GridRowId } from "@mui/x-data-grid";
 import SyncIcon from "@mui/icons-material/Sync";
-import { Delete as DeleteIcon } from "@mui/icons-material";
+import { Delete as DeleteIcon, NetworkCell } from "@mui/icons-material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { AlertIcon } from "../../shared/UI/icons/icons";
 
 function SlideTransition(props: SlideProps) {
   return <Slide {...props} direction="left" />;
@@ -43,34 +56,82 @@ const fetchElementDetails = async (id: GridRowId) => {
   return await fetchDetailedNetworkElementById(id as string);
 };
 
+function HeartbeatDisplay({ ne_id }: { ne_id: string }) {
+  const [heartbeat, setHeartbeat] = useState<{
+    healthy: boolean;
+    checked_at: string;
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    checkLatestHeartbeat(ne_id)
+      .then((data) => setHeartbeat(data))
+      .catch((err) => console.error("Heartbeat fetch error:", err))
+      .finally(() => setLoading(false));
+  }, [ne_id]);
+
+  if (loading) return <CircularProgress size={16} />;
+
+  if (!heartbeat)
+    return (
+      <Typography variant="body2" color="text.secondary">
+        No data
+      </Typography>
+    );
+
+  return (
+    <Box>
+      <Box display="flex" alignItems="center" gap={1}>
+        <Box
+          sx={{
+            width: 10,
+            height: 10,
+            borderRadius: "50%",
+            backgroundColor: heartbeat.healthy ? "success.main" : "error.main",
+          }}
+        />
+        <Typography variant="body1" fontWeight={500}>
+          {heartbeat.healthy ? "Healthy" : "Dead"}
+        </Typography>
+      </Box>
+      <Typography variant="caption" color="text.secondary">
+        {new Date(heartbeat.checked_at).toLocaleString()}
+      </Typography>
+    </Box>
+  );
+}
+
 export function ElementsPage() {
   const navigate = useNavigate();
   const theme = useTheme();
+
   const [elements, setElements] = useState<NetworkElement[]>([]);
+  const [, setLoading] = useState(true);
+  const [syncingId, setSyncingId] = useState<string | null>(null);
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [elementToDelete, setElementToDelete] = useState<NetworkElement | null>(
     null,
   );
+
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
-    severity: "success" | "error";
+    severity: "success" | "error" | "warning" | "info";
   }>({
     open: false,
     message: "",
     severity: "success",
   });
-  const [syncingId, setSyncingId] = useState<string | null>(null);
-  const [, setLoading] = useState(true);
 
   useEffect(() => {
     fetchNetworkElements()
       .then((data) => setElements(data))
-      .catch((error) => {
-        console.error("Failed to fetch network elements:", error);
+      .catch(() => {
         setSnackbar({
           open: true,
-          message: "Failed to load network elements. Please refresh the page.",
+          message: "Failed to load network elements.",
           severity: "error",
         });
       })
@@ -93,10 +154,9 @@ export function ElementsPage() {
         severity: "success",
       });
     } catch (error) {
-      console.error("Delete failed: ", error);
       setSnackbar({
         open: true,
-        message: "Failed to delete element. Please try again.",
+        message: "Failed to delete element.",
         severity: "error",
       });
     } finally {
@@ -110,9 +170,8 @@ export function ElementsPage() {
     setElementToDelete(null);
   };
 
-  const handleCloseSnackbar = () => {
+  const handleCloseSnackbar = () =>
     setSnackbar((prev) => ({ ...prev, open: false }));
-  };
 
   const handleSync = async (id: string) => {
     setSyncingId(id);
@@ -124,19 +183,71 @@ export function ElementsPage() {
         severity: "success",
       });
     } catch (error) {
-      console.error("Sync failed: ", error);
       const msg = (error as Error).message;
       setSnackbar({
         open: true,
-        message: msg.includes("no active connection")
+        message: msg.includes("no active")
           ? "Device is not connected"
-          : msg.includes("not found")
-            ? "Device not found"
-            : "Failed to sync",
+          : "Failed to sync",
         severity: "error",
       });
     } finally {
       setSyncingId(null);
+    }
+  };
+
+  const handlePowerOff = async (ne_id: string, name: string) => {
+    try {
+      await powerOffNetworkElement(ne_id);
+      setSnackbar({
+        open: true,
+        message: `Heartbeat loss test for ${name}.`,
+        severity: "warning",
+      });
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to simulate heartbeat loss.",
+        severity: "error",
+      });
+    }
+  };
+
+  const handleCheckHeartbeat = async (ne_id: string) => {
+    try {
+      await checkHeartbeat(ne_id);
+      setSnackbar({
+        open: true,
+        message: "Heartbeat check successful! Device is healthy.",
+        severity: "success",
+      });
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to check heartbeat.",
+        severity: "error",
+      });
+    }
+  };
+
+  const handleTriggerAlarm = async (
+    ne_id: string,
+    severity: string,
+    message: string,
+  ) => {
+    try {
+      await createTestAlarm({ ne_id, severity, message });
+      setSnackbar({
+        open: true,
+        message: `Test ${severity} alarm created!`,
+        severity: "success",
+      });
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: `Failed to create ${severity} test alarm`,
+        severity: "error",
+      });
     }
   };
 
@@ -151,105 +262,137 @@ export function ElementsPage() {
         fetchDetails={fetchElementDetails}
         onAdd={() => navigate("/elements/add")}
         renderDetails={(row, additionalData) => (
-          <Paper
-            elevation={0}
-            sx={{
-              p: 3,
-            }}
-          >
+          <Paper elevation={0} sx={{ p: 3 }}>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                mb: 2,
+                mb: 3,
               }}
             >
-              <Box display="flex" gap={2} alignItems="center">
-                <Typography color="text.secondary" fontWeight={600}>
-                  Device name:{" "}
+              <Box>
+                <Typography color="text.secondary" variant="body2">
+                  Device name
                 </Typography>
-                <Typography variant="body1" sx={{ wordBreak: "break-word" }}>
+                <Typography
+                  variant="h6"
+                  fontWeight={600}
+                  sx={{ wordBreak: "break-word" }}
+                >
                   {row.name}
                 </Typography>
               </Box>
 
-              <Box display="flex" gap={2}>
-                <Button
-                  variant="outlined"
-                  size="medium"
-                  startIcon={<SyncIcon />}
-                  onClick={() => handleSync(row.id)}
-                  disabled={syncingId === row.id}
-                >
-                  {syncingId === row.id ? "Syncing" : "Sync"}
-                </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  size="medium"
-                  startIcon={<DeleteIcon />}
-                  onClick={() => handleDeleteClick(row)}
-                >
-                  Delete
-                </Button>
+              <Box display="flex" gap={1}>
+                <Tooltip title="Trigger Critical Alarm">
+                  <IconButton
+                    color="error"
+                    onClick={() =>
+                      handleTriggerAlarm(
+                        row.id,
+                        "critical",
+                        "test critical alarm",
+                      )
+                    }
+                  >
+                    <NetworkCell />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Simulate Heartbeat Loss">
+                  <IconButton
+                    color="warning"
+                    onClick={() => handlePowerOff(row.id, row.name)}
+                  >
+                    <AlertIcon />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Check Heartbeat (Ping)">
+                  <IconButton
+                    color="error"
+                    onClick={() => handleCheckHeartbeat(row.id)}
+                  >
+                    <FavoriteIcon />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Sync element">
+                  <span>
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleSync(row.id)}
+                      disabled={syncingId === row.id}
+                    >
+                      <SyncIcon />
+                    </IconButton>
+                  </span>
+                </Tooltip>
+
+                <Tooltip title="Delete element">
+                  <IconButton
+                    color="error"
+                    onClick={() => handleDeleteClick(row)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
               </Box>
             </Box>
 
-            <Divider
-              sx={{
-                mb: 3,
-              }}
-            />
+            <Divider sx={{ mb: 3 }} />
 
             <Box
               sx={{
                 display: "grid",
-                gridTemplateColumns: {
-                  xs: "1fr",
-                  sm: "repeat(1, 2fr)",
-                  md: "repeat(1, 2fr)",
-                },
+                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
                 gap: 3,
+                mb: 4,
               }}
             >
-              <Box display="flex" gap={2}>
-                <Typography color="text.secondary" fontWeight={600}>
-                  ID:{" "}
+              <Box>
+                <Typography color="text.secondary" variant="body2" mb={0.5}>
+                  ID
                 </Typography>
-                <Typography
-                  variant="body1"
-                  fontFamily="monospace"
-                  sx={{ fontWeight: 500 }}
-                >
+                <Typography variant="body1" fontFamily="monospace">
                   {row.id}
                 </Typography>
               </Box>
-              <Box display="flex" gap={2} alignItems="center">
-                <Typography color="text.secondary" fontWeight={600}>
-                  IP Address:{" "}
+
+              <Box>
+                <Typography color="text.secondary" variant="body2" mb={0.5}>
+                  IP Address
                 </Typography>
                 <Typography variant="body1" fontFamily="monospace">
                   {row.address}
                 </Typography>
               </Box>
-              <Box display="flex" gap={2} alignItems="center">
-                <Typography color="text.secondary" fontWeight={600}>
-                  Vendor:{" "}
+
+              <Box>
+                <Typography color="text.secondary" variant="body2" mb={0.5}>
+                  Vendor
                 </Typography>
                 <Typography variant="body1">{row.vendor}</Typography>
               </Box>
-              <Box display="flex" gap={2} alignItems="center">
-                <Typography color="text.secondary" fontWeight={600}>
-                  Created:{" "}
+
+              <Box>
+                <Typography color="text.secondary" variant="body2" mb={0.5}>
+                  Management Status
                 </Typography>
-                <Typography variant="body2">
-                  {new Date(row.created_at).toLocaleString()}
-                </Typography>
+                <Status status={row.status as AllStatuses} />
               </Box>
-              <Box display="flex" gap={2} alignItems="center">
-                <Typography color="text.secondary" fontWeight={600}>
-                  Updated:{" "}
+
+              <Box>
+                <Typography color="text.secondary" variant="body2" mb={0.5}>
+                  Heartbeat Status
+                </Typography>
+                <HeartbeatDisplay ne_id={row.id} />
+              </Box>
+
+              <Box>
+                <Typography color="text.secondary" variant="body2" mb={0.5}>
+                  Updated
                 </Typography>
                 <Typography variant="body2">
                   {new Date(row.updated_at).toLocaleString()}
@@ -257,51 +400,63 @@ export function ElementsPage() {
               </Box>
             </Box>
 
-            <Box display="flex" gap={2} sx={{ mt: 3 }}>
-              <Typography color="text.secondary" fontWeight={600}>
-                Capabilities:{" "}
+            <Box mb={4}>
+              <Typography color="text.secondary" variant="body2" mb={1}>
+                Capabilities
               </Typography>
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                {row.capabilities.map((cap: string, index: number) => (
-                  <Chip
-                    key={index}
-                    label={cap}
-                    size="small"
-                    variant="outlined"
+                {Array.isArray(row.capabilities)
+                  ? row.capabilities.map((cap: string, index: number) => (
+                      <Chip
+                        key={index}
+                        label={cap}
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                          borderRadius: 1.5,
+                          borderColor: theme.palette.divider,
+                        }}
+                      />
+                    ))
+                  : null}
+              </Box>
+            </Box>
+
+            {!!additionalData && !(additionalData as any)?.notSynced && (
+              <Accordion
+                disableGutters
+                elevation={0}
+                sx={{
+                  backgroundColor: "transparent",
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: "8px !important",
+                  "&:before": { display: "none" },
+                }}
+              >
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography fontWeight={600} color="text.secondary">
+                    Advanced / Raw Inventory Data
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ p: 0 }}>
+                  <Paper
+                    elevation={0}
                     sx={{
-                      borderRadius: 1.5,
-                      borderColor: theme.palette.text.primary,
-                      color: theme.palette.text.primary,
+                      p: 2,
+                      overflowX: "auto",
+                      backgroundColor: "rgba(0, 0, 0, 0.2)",
+                      borderRadius: "0 0 8px 8px",
                     }}
-                  />
-                ))}
-              </Box>
-            </Box>
-            <Box display="flex" gap={2} alignItems="center" marginTop={2}>
-              <Typography color="text.secondary" fontWeight={600}>
-                Status:{" "}
-              </Typography>{" "}
-              <Status status={row.status as AllStatuses} />
-            </Box>
-            {additionalData && !(additionalData as any)?.notSynced && (
-              <Box mt={3}>
-                <Typography color="text.secondary" fontWeight={600} mb={1}>
-                  Raw Inventory Data:
-                </Typography>
-                <Paper
-                  variant="outlined"
-                  sx={{
-                    p: 2,
-                    overflowX: "auto",
-                    borderRadius: 2,
-                  }}
-                >
-                  <pre>{JSON.stringify(additionalData, null, 2)}</pre>
-                </Paper>
-              </Box>
+                  >
+                    <pre style={{ margin: 0, fontSize: "0.85rem" }}>
+                      {JSON.stringify(additionalData, null, 2)}
+                    </pre>
+                  </Paper>
+                </AccordionDetails>
+              </Accordion>
             )}
 
-            {(additionalData as any)?.notSynced && (
+            {!!additionalData && (additionalData as any)?.notSynced && (
               <Box mt={3}>
                 <Alert
                   variant="outlined"
@@ -321,11 +476,7 @@ export function ElementsPage() {
                     borderRadius: 3,
                     display: "flex",
                     alignItems: "center",
-                    "& .MuiAlert-action": {
-                      padding: 0,
-                      alignSelf: "center",
-                    },
-                    color: theme.palette.text.primary,
+                    "& .MuiAlert-action": { padding: 0, alignSelf: "center" },
                   }}
                 >
                   This device isn't synced yet
@@ -335,6 +486,7 @@ export function ElementsPage() {
           </Paper>
         )}
       />
+
       <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
@@ -343,30 +495,32 @@ export function ElementsPage() {
             action cannot be undone.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button variant="contained" onClick={handleDeleteCancel}>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={handleDeleteCancel} color="inherit">
             Cancel
           </Button>
           <Button
-            variant="contained"
             onClick={handleDeleteConfirm}
+            variant="contained"
             color="error"
-            autoFocus
           >
             Delete
           </Button>
         </DialogActions>
       </Dialog>
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={4000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        slotProps={{ transition: SlideTransition }}
+        TransitionComponent={SlideTransition}
       >
         <Alert
           onClose={handleCloseSnackbar}
-          severity={snackbar.severity}
+          severity={
+            snackbar.severity as "success" | "error" | "warning" | "info"
+          }
           variant="filled"
           sx={{ width: "100%", boxShadow: 3 }}
         >

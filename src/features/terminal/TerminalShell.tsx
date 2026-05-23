@@ -63,7 +63,6 @@ export function TerminalShell({ height = 400 }: TerminalShellProps) {
     const fitAddon = new FitAddon();
     term.loadAddon(fitAddon);
     term.open(terminalRef.current);
-    fitAddon.fit();
     termInstance.current = term;
 
     const prompt = () =>
@@ -248,11 +247,21 @@ export function TerminalShell({ height = 400 }: TerminalShellProps) {
       }
     });
 
-    const handleResize = () => fitAddon.fit();
-    window.addEventListener("resize", handleResize);
+    const resizeObserver = new ResizeObserver(() => {
+      try {
+        if (
+          terminalRef.current?.clientWidth &&
+          terminalRef.current?.clientHeight
+        ) {
+          fitAddon.fit();
+        }
+      } catch (err) {}
+    });
+
+    resizeObserver.observe(terminalRef.current);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      resizeObserver.disconnect();
       disposable.dispose();
       unsubscribe();
       term.dispose();
