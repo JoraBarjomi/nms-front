@@ -378,7 +378,7 @@ export function ElementsPage() {
 
               <Box>
                 <Typography color="text.secondary" variant="body2" mb={0.5}>
-                  Management Status
+                  Status
                 </Typography>
                 <Status status={row.status as AllStatuses} />
               </Box>
