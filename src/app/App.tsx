@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 import Box from "@mui/material/Box";
 import { SideMenu } from "../widgets/SideMenu/SideMenu";
