@@ -15,7 +15,7 @@ import {
   TextField,
   Button,
   InputAdornment,
-  CircularProgress,
+  Skeleton,
   Alert,
   IconButton,
 } from "@mui/material";
@@ -326,9 +326,17 @@ const Table = <TData extends { id: GridRowId }>({
 
           <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
             {detailsLoading && (
-              <Box display="flex" justifyContent="center" py={8}>
-                <CircularProgress size={32} />
-              </Box>
+              <Stack spacing={2} sx={{ p: 3 }}>
+                <Skeleton variant="text" width="60%" height={40} />
+                <Skeleton
+                  variant="rectangular"
+                  width="100%"
+                  height={100}
+                  sx={{ borderRadius: 2 }}
+                />
+                <Skeleton variant="text" width="80%" height={24} />
+                <Skeleton variant="text" width="70%" height={24} />
+              </Stack>
             )}
 
             {detailsError && (

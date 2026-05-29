@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import Box from "@mui/material/Box";
 import { SideMenu } from "../widgets/SideMenu/SideMenu";
@@ -11,7 +12,7 @@ import { ElementsPage } from "../pages/elements/elements";
 import { ElementsAddPage } from "../pages/elementsAdd/elementsAdd";
 import { RegisterPage } from "../pages/register/registerPage";
 import { LoginPage } from "../pages/login/login";
-import { DashboardPage } from "../pages/dashboard";
+import { DashboardPage } from "../pages/dashboard/dashbaord";
 import { AlarmsPage } from "../pages/alarms/alarms";
 import { LogsPage } from "../pages/logs";
 import { ConfigPage } from "../pages/config/configPage";
@@ -113,7 +114,15 @@ const App: React.FC = () => {
                 <Header open={open} curPage={getPageTitle(location.pathname)} />
 
                 <Box sx={{ p: 3, flexGrow: 1, color: "text.primary" }}>
-                  <Outlet />
+                  <motion.div
+                    key={location.pathname}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    style={{ height: "100%" }}
+                  >
+                    <Outlet />
+                  </motion.div>
                 </Box>
               </Box>
             </Box>

@@ -56,7 +56,13 @@ const fetchElementDetails = async (id: GridRowId) => {
   return await fetchDetailedNetworkElementById(id as string);
 };
 
-function HeartbeatDisplay({ ne_id }: { ne_id: string }) {
+function HeartbeatDisplay({
+  ne_id,
+  refreshKey = 0,
+}: {
+  ne_id: string;
+  refreshKey: number;
+}) {
   const [heartbeat, setHeartbeat] = useState<{
     healthy: boolean;
     checked_at: string;
@@ -69,7 +75,7 @@ function HeartbeatDisplay({ ne_id }: { ne_id: string }) {
       .then((data) => setHeartbeat(data))
       .catch((err) => console.error("Heartbeat fetch error:", err))
       .finally(() => setLoading(false));
-  }, [ne_id]);
+  }, [ne_id, refreshKey]);
 
   if (loading) return <CircularProgress size={16} />;
 
@@ -109,6 +115,7 @@ export function ElementsPage() {
   const [elements, setElements] = useState<NetworkElement[]>([]);
   const [, setLoading] = useState(true);
   const [syncingId, setSyncingId] = useState<string | null>(null);
+  const [refreshKeys, setRefreshKeys] = useState<Record<string, number>>({});
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [elementToDelete, setElementToDelete] = useState<NetworkElement | null>(
@@ -216,6 +223,10 @@ export function ElementsPage() {
   const handleCheckHeartbeat = async (ne_id: string) => {
     try {
       await checkHeartbeat(ne_id);
+      setRefreshKeys((prev) => ({
+        ...prev,
+        [ne_id]: (prev[ne_id] || 0) + 1,
+      }));
       setSnackbar({
         open: true,
         message: "Heartbeat check successful! Device is healthy.",
@@ -387,7 +398,10 @@ export function ElementsPage() {
                 <Typography color="text.secondary" variant="body2" mb={0.5}>
                   Heartbeat Status
                 </Typography>
-                <HeartbeatDisplay ne_id={row.id} />
+                <HeartbeatDisplay
+                  ne_id={row.id}
+                  refreshKey={refreshKeys[row.id] || 0}
+                />
               </Box>
 
               <Box>

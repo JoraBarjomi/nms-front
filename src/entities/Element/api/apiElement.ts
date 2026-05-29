@@ -10,7 +10,6 @@ export const fetchNetworkElements = async (): Promise<NetworkElement[]> => {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log("TOKEN:" + token);
   if (response.status === 401) {
     logout();
     throw new Error("Session expired! Please login.");
