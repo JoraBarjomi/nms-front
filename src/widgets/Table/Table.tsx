@@ -22,6 +22,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import TableChartIcon from "@mui/icons-material/TableChart";
 
 type TableProps<TData extends { id: GridRowId }> = {
   rows: TData[];
@@ -30,6 +32,8 @@ type TableProps<TData extends { id: GridRowId }> = {
   renderDetails?: (row: TData, additionalData: unknown) => React.ReactNode;
   fetchDetails?: (id: GridRowId) => Promise<unknown>;
   onAdd?: () => void;
+  onExportCsv?: () => void;
+  onExportPdf?: () => void;
 };
 
 const Table = <TData extends { id: GridRowId }>({
@@ -38,6 +42,8 @@ const Table = <TData extends { id: GridRowId }>({
   renderDetails,
   fetchDetails,
   onAdd,
+  onExportCsv,
+  onExportPdf,
 }: TableProps<TData>) => {
   const [search, setSearch] = useState("");
   const safeRows = useMemo(() => rows ?? [], [rows]);
@@ -167,9 +173,11 @@ const Table = <TData extends { id: GridRowId }>({
                 theme.palette.mode === "dark"
                   ? "rgba(255, 255, 255, 0.02)"
                   : "rgba(0, 0, 0, 0.01)",
+              flexWrap: "wrap",
+              gap: 2,
             }}
           >
-            <Box sx={{ gap: 2, display: "flex" }}>
+            <Box sx={{ gap: 2, display: "flex", flexWrap: "wrap" }}>
               <Button
                 size="small"
                 variant="outlined"
@@ -196,6 +204,31 @@ const Table = <TData extends { id: GridRowId }>({
                   sx={{ height: 36 }}
                 >
                   Add
+                </Button>
+              )}
+              
+              {onExportCsv && (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={<TableChartIcon />}
+                  onClick={onExportCsv}
+                  sx={{ height: 36 }}
+                >
+                  CSV
+                </Button>
+              )}
+              
+              {onExportPdf && (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  color="error"
+                  startIcon={<PictureAsPdfIcon />}
+                  onClick={onExportPdf}
+                  sx={{ height: 36 }}
+                >
+                  PDF
                 </Button>
               )}
             </Box>

@@ -15,6 +15,7 @@ import {
 import { type Alarms } from "../../entities/Alarms/Alarms";
 import { fetchAlarms } from "../../entities/Alarms/api/apiAlarms";
 import { alarmTableColumns } from "../../features/alarmTable/columnsAlarms";
+import { exportAlarmsToCsv, exportAlarmsToPdf } from "../../features/alarmTable/exportUtils";
 
 import Table from "../../widgets/Table/Table";
 
@@ -147,7 +148,12 @@ export function AlarmsPage() {
       </Box>
 
       <Box>
-        <Table rows={alarms} columns={alarmTableColumns} />
+        <Table
+          rows={alarms}
+          columns={alarmTableColumns}
+          onExportCsv={() => exportAlarmsToCsv(alarms)}
+          onExportPdf={() => exportAlarmsToPdf(alarms)}
+        />
       </Box>
     </Box>
   );
